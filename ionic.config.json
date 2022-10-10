@@ -1,0 +1,8 @@
+{
+  "name": "vALDI",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue",
+  "id": "f6de95e3"
+}
