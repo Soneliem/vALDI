@@ -5,7 +5,7 @@
         <img src="/assets/img/appicon.svg" alt="Ionic logo">
       </div> -->
 
-      <form @submit.prevent="login">
+      <form v-on:@submit.prevent="login">
         <ion-card class="ion-justify-content-center">
           <ion-card-header>
             <ion-card-title>Sign In</ion-card-title>
@@ -55,7 +55,7 @@ import {
   useIonRouter,
 } from "@ionic/vue";
 import { logIn, personAdd } from "ionicons/icons";
-import { useAccountStore } from "@/store/account";
+import { useAccountStore } from "../store/account";
 
 export default defineComponent({
   name: "LoginPage",
@@ -81,8 +81,9 @@ export default defineComponent({
       password: "",
     };
     const login = async () => {
-      if (await store.signInUser(form.username, form.password)) {
-        ionRouter.replace("/tabs/store");
+      store.signInUser(form.username, form.password)
+      if (store.isLoggedIn) {
+        // ionRouter.replace("/tabs/store");
       }
       else {
         alert("Invalid username or password");

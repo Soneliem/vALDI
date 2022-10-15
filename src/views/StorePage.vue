@@ -11,7 +11,7 @@
           <ion-title size="large">Store</ion-title>
         </ion-toolbar>
       </ion-header>
-    
+
       <ExploreContainer name="Store" />
     </ion-content>
   </ion-page>
@@ -20,9 +20,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import ExploreContainer from '../components/ExploreContainer.vue';
 
-export default  defineComponent({
+export default defineComponent({
   name: 'StorePage',
   components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
 });

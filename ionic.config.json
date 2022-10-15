@@ -3,6 +3,5 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "vue",
-  "id": "f6de95e3"
+  "type": "vue"
 }

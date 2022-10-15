@@ -1,4 +1,3 @@
-import { signIn, signOut } from "@/services/valorant";
 import { defineStore } from "pinia";
 
 export const useAccountStore = defineStore("accountStore", {
@@ -7,19 +6,12 @@ export const useAccountStore = defineStore("accountStore", {
     isLoggedIn: (state) => state.account !== null,
   },
   actions: {
-    async signInUser(email: string, password: string) {
-      try {
-        const response = await signIn(email, password);
-        this.account = response ? response : null;
-        return true;
-      } catch (e) {
-        this.account = null;
-        return false;
-      }
+    async signInUser(username: string, password: string) {
+      // await ValClient.login(username, password);
     },
     async signoutUser() {
       try {
-        await signOut();
+        // await signOut();
         this.account = null;
         return true;
       } catch (e) {

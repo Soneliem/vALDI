@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { useAccountStore } from "./store";
-
 import { IonicVue } from "@ionic/vue";
 import { createPinia } from "pinia";
 
