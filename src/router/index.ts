@@ -2,10 +2,6 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { NavigationGuard, RouteRecordRaw } from "vue-router";
 import { useAccountStore } from "../store";
 import TabsPage from "../views/TabsPage.vue";
-import LoginPage from "../views/LoginPage.vue";
-import StorePage from "../views/StorePage.vue";
-import AccountPage from "../views/AccountPage.vue";
-
 const authCheck: NavigationGuard = function (to, from, next) {
   if (!useAccountStore().isLoggedIn) {
     next({ name: "login" });
@@ -22,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: "login",
     path: "/login",
-    component: () => LoginPage,
+    component: () => import("@/views/LoginPage.vue"),
   },
   {
     path: "/tabs/",
@@ -34,12 +30,12 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "store",
-        component: () => StorePage,
+        component: () => import("@/views/StorePage.vue"),
         beforeEnter: authCheck,
       },
       {
         path: "account",
-        component: () => AccountPage,
+        component: () => import("@/views/AccountPage.vue"),
         beforeEnter: authCheck,
       },
     ],
