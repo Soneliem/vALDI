@@ -4,21 +4,15 @@ import { useAccountStore } from "../store";
 import TabsPage from "../views/TabsPage.vue";
 const authCheck: NavigationGuard = function (to, from, next) {
   if (!useAccountStore().isLoggedIn) {
-    next({ name: "login" });
+    next({ path: "/tabs/login" });
   } else {
     next();
   }
 };
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     redirect: "/tabs/store",
-  },
-  {
-    name: "login",
-    path: "/login",
-    component: () => import("@/views/LoginPage.vue"),
   },
   {
     path: "/tabs/",
@@ -29,13 +23,17 @@ const routes: Array<RouteRecordRaw> = [
         redirect: "/tabs/store",
       },
       {
-        path: "store",
-        component: () => import("@/views/StorePage.vue"),
+        path: "account",
+        component: () => import("@/views/AccountPage.vue"),
         beforeEnter: authCheck,
       },
       {
-        path: "account",
-        component: () => import("@/views/AccountPage.vue"),
+        path: "login",
+        component: () => import("@/views/LoginPage.vue"),
+      },
+      {
+        path: "store",
+        component: () => import("@/views/StorePage.vue"),
         beforeEnter: authCheck,
       },
     ],

@@ -1,0 +1,6 @@
+{
+  "appId": "dev.sonel.valdi",
+  "appName": "vALDI",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

@@ -1,86 +1,172 @@
-# Vue 3 + Typescript + Vite + Ionic Framework v6 
+# Vite with the Ionic tabs starter!
 
-This template should help get you started developing with Vue 3 and Typescript in Vite.
+Based on [the YouTube tutorial](https://www.youtube.com/watch?v=-FwQ6c6OreQ) from [@alvarosabu](https://github.com/alvarosabu).
 
-Updated 8/11/22
+[View the commit](https://github.com/dolthead/vitehow/commit/2ab6f7e311942ef8ea472cdb9a00e17a9a873d5e) for all these changes.
 
---
+If you don't care how it's done--you just want the vite-based tabs starter--then fork and clone away!
 
-## Getting Live Reload To Work In You Vite Ionic Project
+## Why?
 
-I dont use Live reload that often, but this is a manual approach to get it going with the Vite project
+The prod build using vue-cli is **3MB**, while the build with VITE is **413KB** (86% smaller)!
 
-**First Start Your Server**
+Also, the dev live reload times are super-much quicklier with VITE. ⚡️
+
+## Start with the Ionic Vue tabs starter
+
+> `npm i -g @ionic/cli@latest`
+>
+> `ionic start tabsApp tabs --type vue`
+>
+> `cd tabsApp`
+>
+> `code .`
+
+Edit tsconfig.json:
+
+- `types: [ "node" ]`
+- `exclude: [ "node_modules", "tests" }`
+  
+Edit package.json:
+
+- remove all @vue/cli lines
+- remove all jest lines
+- replace scripts with
 ```
-aaronksaunders@Aarons-14MacBookProM1Pro my-react-app % npm run dev
-
-> my-react-app@0.0.0 dev
-> vite
-
-
-  VITE v3.0.6  ready in 359 ms
-
-  ➜  Local:   http://127.0.0.1:5173/
-  ➜  Network: use --host to expose
-12:57:47 AM [vite] hmr update /src/App.tsx
+"serve": "vite dev",
+"build": "vue-tsc --noEmit && vite build",
+"e2e": "cypress run",
+"test": "vitest",
+"coverage": "vitest run --coverage",
 ```
 
+Install vite and vitest, with dependencies:
 
-**Then modify `capacitor.config.ts`** using the address the server is running on from the command above
+> `npm i -D vue-tsc vite @vitejs/plugin-vue jshint` // for vite
+> 
+> `npm i -D vitest jsdom @vitest/coverage-c8` // for vitest 
+
+Remove jest.config.js:
+
+> `rm jest.config.js`
+
+Add vite.config.ts
+
 ```
-const config: CapacitorConfig = {
-  appId: 'my.react.app',
-  appName: 'my-react-app',
-  webDir: 'dist',
-  bundledWebRuntime: false,
-  server : {
-    "url" : "http://127.0.0.1:5173/"  //<= use address the server is running on locally
-  }
-};
+import { defineConfig } from "vite";
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+export default defineConfig({
+    define: {
+        'process.env': {},
+    },
+    resolve:{
+        alias:{
+            '@' : path.resolve(__dirname, './src')
+        },
+    },
+	plugins: [ 
+		vue(),
+	],
+	server: {
+		port: 8100,
+        open: true,
+	},
+});
 ```
-**And finally deploy your app to the device**
+
+Add vitest.config.ts:
+
 ```
-aaronksaunders@Aarons-14MacBookProM1Pro my-react-app % npx cap run ios --external  --target=73CE91C9-4855-496B-9481-CA486652E9D7
-✔ Copying web assets from dist to ios/App/App/public in 12.83ms
-✔ Creating capacitor.config.json in ios/App/App in 1.35ms
-✔ copy ios in 25.05ms
-✔ Updating iOS plugins in 1.96ms
-[info] Found 4 Capacitor plugins for ios:
-       @capacitor/app@4.0.1
-       @capacitor/haptics@4.0.1
-       @capacitor/keyboard@4.0.1
-       @capacitor/status-bar@4.0.1
-✔ Updating iOS native dependencies with pod install in 2.53s
-✔ update ios in 2.56s
-✔ Running xcodebuild in 3.20s
-✔ Deploying App.app to 73CE91C9-4855-496B-9481-CA486652E9D7 in 1.51s
-aaronksaunders@Aarons-14MacBookProM1Pro my-react-app % 
+import { mergeConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
+import viteConfig from './vite.config';
+import { fileURLToPath, URL } from "url";
+
+export default mergeConfig(viteConfig, defineConfig({
+    test: {
+        deps: {
+            inline: [
+                "@ionic/core"
+            ]
+        },
+        globals: true,
+        environment: 'jsdom',
+    },
+    resolve: {
+      alias: {
+        '@ionic/vue/css': fileURLToPath(new URL('./node_modules/@ionic/vue/css', import.meta.url)),
+        '@ionic/vue': fileURLToPath(new URL('./node_modules/@ionic/vue/dist/index.esm.js', import.meta.url))
+      },
+    },
+  },
+));
 ```
-Now your mobile app is pointing to the local server running and you basically have live-reload working. I am certain there is another approach, but like I said I don't use it often enough. Hopefully, this gets you moving
 
-**REMEMBER**
-remove the edit to the `capacitor.config.ts` before deploying to production otherwise the app will be looking for the local server to run the app !!
+Add `"baseUrl": "http://localhost:8100"` to `cypress.json`.
 
-## Recommended IDE Setup
+Move & edit index.html:
 
-[VSCode](https://code.visualstudio.com/) + [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur). Make sure to enable `vetur.experimental.templateInterpolationService` in settings!
+> `mv public/index.html .`
+> 
+remove `<%= BASE_URL %>`
 
-### If Using `<script setup>`
+add `<script type="module" src="/src/main.ts"></script>`
+after `<div id="app"></div>`
 
-[`<script setup>`](https://github.com/vuejs/rfcs/pull/227) is a feature that is currently in RFC stage. To get proper IDE support for the syntax, use [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) instead of Vetur (and disable Vetur).
+## Start it up
 
-## Type Support For `.vue` Imports in TS
+> `npm run serve`
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can use the following:
+## Run unit and e2e tests
 
-### If Using Volar
+> `npm run test`
+>
+> `npm run coverage`
+> 
+> `npm run e2e`
 
-Run `Volar: Switch TS Plugin on/off` from VSCode command palette.
+## Prod build
 
-### If Using Vetur
+> `npm run build`
 
-1. Install and add `@vuedx/typescript-plugin-vue` to the [plugins section](https://www.typescriptlang.org/tsconfig#plugins) in `tsconfig.json`
-2. Delete `src/shims-vue.d.ts` as it is no longer needed to provide module info to Typescript
-3. Open `src/main.ts` in VSCode
-4. Open the VSCode command palette
-5. Search and run "Select TypeScript version" -> "Use workspace version"
+-----
+
+## Add PWA support
+
+> `npm i -D vite-plugin-pwa`
+
+Update your `vite.config.ts`:
+
+```
+import { VitePWA } from 'vite-plugin-pwa';
+...
+	plugins: [ 
+		vue(),
+		VitePWA({ registerType: 'autoUpdate' }),
+	],
+```
+
+Update your `tsconfig.json`:
+```
+"types": [
+    "node",
+    "vite-plugin-pwa/client",
+],
+```
+
+Add to your `package.json` scripts:
+
+```
+"serve:pwa": "vite build --mode pwa && vite preview --mode pwa",
+```
+
+Run the PWA on your machine:
+
+> `npm run serve:pwa`
+
+-----
+
+### Note
+
+Ignore 404 warnings for missing map files--it's caused by the "Vue.js devtools" chrome extension.

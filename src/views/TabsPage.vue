@@ -7,8 +7,8 @@
           <ion-icon :icon="square" />
           <ion-label>Store</ion-label>
         </ion-tab-button>
-          
-        <ion-tab-button tab="tab2" href="/tabs/account">
+
+        <ion-tab-button tab="account" href="/tabs/account">
           <ion-icon :icon="ellipse" />
           <ion-label>Account</ion-label>
         </ion-tab-button>
@@ -27,8 +27,8 @@ export default defineComponent({
   components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
   setup() {
     return {
-      ellipse, 
-      square, 
+      ellipse,
+      square,
     }
   }
 });
