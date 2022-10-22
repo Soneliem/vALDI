@@ -11,18 +11,23 @@ export const useAccountStore = defineStore("accountStore", {
   },
   actions: {
     async signInUser(username: string, password: string, region: string) {
-      const res = await axios.post("/api/auth", {
-        username: username,
-        password: password,
-        region: region,
-      });
-      this.APIClient = res.data;
+      try {
+        const res = await axios.post("http://localhost:3000/api/auth", {
+          username: username,
+          password: password,
+          region: region,
+        });
+        this.APIClient = res.data;
 
-      if (res.status == 200) {
-        this.accountStatus = accountStatus.loggedIn;
-      }
-      if (res.status == 511) {
-        this.accountStatus = accountStatus.needsMFA;
+        if (res.status == 200) {
+          this.accountStatus = accountStatus.loggedIn;
+        } else if (res.status == 205) {
+          this.accountStatus = accountStatus.needsMFA;
+        } else {
+          this.accountStatus = accountStatus.notLoggedIn;
+        }
+      } catch (error) {
+        this.accountStatus = accountStatus.notLoggedIn;
       }
     },
     async submitMFA(code: string) {

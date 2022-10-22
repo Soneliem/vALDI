@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { NavigationGuard, RouteRecordRaw } from "vue-router";
-import { useAccountStore } from "../store";
+import { useAccountStore } from "../store/account";
 import TabsPage from "../views/TabsPage.vue";
 const authCheck: NavigationGuard = function (to, from, next) {
   if (!useAccountStore().isLoggedIn) {
