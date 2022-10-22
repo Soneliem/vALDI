@@ -1,10 +1,11 @@
 {
   "name": "v-aldi",
   "description": "A Store Checker for Valorant",
+  "private": true,
   "scripts": {
-    "back:start": "npm run start --workspace=frontend",
-    "front:start": "npm run start --workspace=backend",
-    "start": "npm run start --workspace=frontend & npm run start --workspace=backend"
+    "back:start": "yarn start --workspace=backend",
+    "front:start": "yarn yarn start --workspace=frontend",
+    "start": "yarn workspaces run start"
   },
   "workspaces": [
     "frontend",

@@ -1,8 +1,7 @@
 {
   "name": "v-aldi-backend",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Backend API for vALDI",
-  "main": "index.js",
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel deploy --prod"
