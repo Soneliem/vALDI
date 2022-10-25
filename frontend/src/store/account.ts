@@ -2,10 +2,12 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { accountStatus } from "@/models";
 
-export const APIClient = {};
+import { Storage } from "@ionic/storage";
+const store = new Storage();
+await store.create();
 
 export const useAccountStore = defineStore("accountStore", {
-  state: () => ({ accountStatus: accountStatus.notLoggedIn, APIClient: {} }),
+  state: () => ({ accountStatus: accountStatus.notLoggedIn }),
   getters: {
     isLoggedIn: (state) => state.accountStatus == accountStatus.loggedIn,
   },
@@ -17,32 +19,56 @@ export const useAccountStore = defineStore("accountStore", {
           password: password,
           region: region,
         });
-        this.APIClient = res.data;
-
         if (res.status == 200) {
+          await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.loggedIn;
         } else if (res.status == 205) {
+          await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.needsMFA;
         } else {
           this.accountStatus = accountStatus.notLoggedIn;
         }
       } catch (error) {
         this.accountStatus = accountStatus.notLoggedIn;
+        console.error("Error loggin in", error);
       }
     },
     async submitMFA(code: string) {
-      const res = await axios.post("/api/auth/mfa", {
-        code: code,
-      });
-      this.APIClient = res.data;
+      try {
+        const res = await axios.post("/api/auth/mfa", {
+          code: code,
+          APIClient: await store.get("APIClient"),
+        });
+        if (res.status == 200) {
+          await store.set("APIClient", res.data);
+          this.accountStatus = accountStatus.loggedIn;
+        } else if (res.status == 205) {
+          await store.set("APIClient", res.data);
+          this.accountStatus = accountStatus.needsMFA;
+        } else {
+          this.accountStatus = accountStatus.notLoggedIn;
+        }
+        await store.set("APIClient", res.data);
+      } catch (error) {
+        this.accountStatus = accountStatus.notLoggedIn;
+        console.error("Error submitting MFA", error);
+      }
     },
     async signoutUser() {
-      this.APIClient = {};
+      await store.remove("APIClient");
       this.accountStatus = accountStatus.notLoggedIn;
     },
     async getStore() {
-      const res = await axios.get("/api/store");
-      return res.data;
+      try {
+        const res = await axios.post("/api/store", {
+          APIClient: await store.get("APIClient"),
+        });
+        if (res.status == 200) {
+          return res.data;
+        }
+      } catch (error) {
+        console.error("Error getting store", error);
+      }
     },
   },
 });

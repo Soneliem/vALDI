@@ -1,8 +1,8 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <!-- <form v-on:@submit.prevent="login"> -->
-      <ion-card class="ion-justify-content-center">
+
+      <ion-card class="card">
         <ion-card-header>
           <ion-card-title>Sign In</ion-card-title>
           <ion-card-subtitle>Sign in with your Riot credentials</ion-card-subtitle>
@@ -20,7 +20,7 @@
             </ion-item>
 
             <ion-item>
-              <ion-select interface="popover" placeholder="Select Region" v-model="form.region">
+              <ion-select interface="popover" placeholder="Select Region" v-model="form.region" type="text">
                 <ion-select-option value="na">North America</ion-select-option>
                 <ion-select-option value="latam">Latin America</ion-select-option>
                 <ion-select-option value="br">Brazil</ion-select-option>
@@ -40,7 +40,7 @@
           </ion-item-group>
         </ion-card-content>
       </ion-card>
-      <!-- </form> -->
+
     </ion-content>
   </ion-page>
 </template>
@@ -89,7 +89,17 @@ async function login() {
   else if (store.accountStatus === accountStatus.needsMFA) {
     alert("MFA Needed!");
   } else {
-    alert("Invalid username or password");
+    alert("Error Signing In");
   }
 }
 </script>
+
+<style scoped>
+.card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1em;
+}
+</style>
