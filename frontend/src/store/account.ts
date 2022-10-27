@@ -14,7 +14,7 @@ export const useAccountStore = defineStore("accountStore", {
   actions: {
     async signInUser(username: string, password: string, region: string) {
       try {
-        const res = await axios.post("http://localhost:3000/api/auth", {
+        const res = await axios.post(process.env.BackendURL + "/api/auth", {
           username: username,
           password: password,
           region: region,
@@ -35,7 +35,7 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async submitMFA(code: string) {
       try {
-        const res = await axios.post("/api/auth/mfa", {
+        const res = await axios.post(process.env.BackendURL + "/api/auth/mfa", {
           code: code,
           APIClient: await store.get("APIClient"),
         });
@@ -60,7 +60,7 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async getStore() {
       try {
-        const res = await axios.post("/api/store", {
+        const res = await axios.post(process.env.BackendURL + "/api/store", {
           APIClient: await store.get("APIClient"),
         });
         if (res.status == 200) {
