@@ -4,7 +4,7 @@ import { accountStatus } from "@/models";
 
 import { Storage } from "@ionic/storage";
 const store = new Storage();
-await store.create();
+store.create();
 
 export const useAccountStore = defineStore("accountStore", {
   state: () => ({ accountStatus: accountStatus.notLoggedIn }),
