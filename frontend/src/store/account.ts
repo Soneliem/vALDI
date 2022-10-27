@@ -14,11 +14,14 @@ export const useAccountStore = defineStore("accountStore", {
   actions: {
     async signInUser(username: string, password: string, region: string) {
       try {
-        const res = await axios.post(process.env.BackendURL + "/api/auth", {
-          username: username,
-          password: password,
-          region: region,
-        });
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/api/auth",
+          {
+            username: username,
+            password: password,
+            region: region,
+          }
+        );
         if (res.status == 200) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.loggedIn;
@@ -35,10 +38,13 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async submitMFA(code: string) {
       try {
-        const res = await axios.post(process.env.BackendURL + "/api/auth/mfa", {
-          code: code,
-          APIClient: await store.get("APIClient"),
-        });
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/api/auth/mfa",
+          {
+            code: code,
+            APIClient: await store.get("APIClient"),
+          }
+        );
         if (res.status == 200) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.loggedIn;
@@ -60,9 +66,12 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async getStore() {
       try {
-        const res = await axios.post(process.env.BackendURL + "/api/store", {
-          APIClient: await store.get("APIClient"),
-        });
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/api/store",
+          {
+            APIClient: await store.get("APIClient"),
+          }
+        );
         if (res.status == 200) {
           return res.data;
         }
