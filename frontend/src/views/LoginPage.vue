@@ -69,7 +69,7 @@ import {
 import { logIn } from "ionicons/icons";
 import { ref } from "vue";
 import { useAccountStore } from "../store/account";
-const store = useAccountStore();
+const accountStore = useAccountStore();
 const ionRouter = useIonRouter();
 const form = {
   username: "",
@@ -81,12 +81,12 @@ const isLoading = ref(false);
 
 async function login() {
   isLoading.value = true;
-  await store.signInUser(form.username, form.password, form.region);
+  await accountStore.signInUser(form.username, form.password, form.region);
   isLoading.value = false;
-  if (store.accountStatus === accountStatus.loggedIn) {
+  if (accountStore.accountStatus === accountStatus.loggedIn) {
     ionRouter.replace("/tabs/store");
   }
-  else if (store.accountStatus === accountStatus.needsMFA) {
+  else if (accountStore.accountStatus === accountStatus.needsMFA) {
     alert("MFA Needed!");
   } else {
     alert("Error Signing In");

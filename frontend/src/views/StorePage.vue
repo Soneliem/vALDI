@@ -12,12 +12,27 @@
         </ion-toolbar>
       </ion-header>
 
-      <ExploreContainer name="Store" />
+      <StoreItem :loading="true" v-for="i in 4" v-bind:key="i"></StoreItem>
+
+      <!-- <StoreItem v-for="item in store" v-bind:key="item"></StoreItem> -->
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts" setup>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import StoreItem from '@/components/StoreItem.vue';
+import { useAccountStore } from '@/store/account';
+import { onMounted, Ref, ref } from 'vue';
+const accountStore = useAccountStore();
+let store: Ref<any[]> = ref([]);
+const isLoading = ref(true);
+
+onMounted(async () => {
+  store = await accountStore.getStore();
+  isLoading.value = false;
+});
+console.log(store);
+
 </script>
