@@ -14,7 +14,7 @@
 
       <StoreItem :loading="true" v-for="i in 4" v-bind:key="i"></StoreItem>
 
-      <!-- <StoreItem v-for="item in store" v-bind:key="item"></StoreItem> -->
+      <!-- <StoreItem :loading="false" v-for="item in store" v-bind:key="item"></StoreItem> -->
 
     </ion-content>
   </ion-page>
