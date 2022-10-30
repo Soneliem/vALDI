@@ -1,28 +1,23 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Backend API for vALDI",
   "scripts": {
-    "start": "vercel dev",
-    "deploy": "vercel deploy --prod"
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Soneliem/vALDI.git"
-  },
-  "author": "Soneliem",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Soneliem/vALDI/issues"
-  },
-  "homepage": "https://github.com/Soneliem/vALDI#readme",
   "dependencies": {
-    "@types/express": "^4.17.14",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "typescript": "^4.8.4",
     "valorant.ts": "^1.4.4"
   },
   "devDependencies": {
-    "@vercel/node": "^2.5.26"
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.7",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   }
 }

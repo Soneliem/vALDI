@@ -3,10 +3,20 @@
   "description": "A Store Checker for Valorant",
   "private": true,
   "scripts": {
-    "back:start": "yarn --cwd backend start",
-    "front:start": "yarn --cwd frontend start",
-    "start": "npm-run-all --parallel back:start front:start"
+    "backend": "yarn --cwd backend dev",
+    "frontend": "yarn --cwd frontend start",
+    "start": "npm-run-all --parallel backend frontend"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soneliem/vALDI.git"
+  },
+  "author": "Soneliem",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Soneliem/vALDI/issues"
+  },
+  "homepage": "https://github.com/Soneliem/vALDI#readme",
   "workspaces": [
     "frontend",
     "backend"
