@@ -30,9 +30,9 @@ let store: Ref<any[]> = ref([]);
 const isLoading = ref(true);
 
 onMounted(async () => {
-  store = await accountStore.getStore();
+  // store = await accountStore.getStore();
+  console.log(await accountStore.getStore())
   isLoading.value = false;
 });
-console.log(store);
 
 </script>

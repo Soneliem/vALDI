@@ -2,9 +2,14 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { NavigationGuard, RouteRecordRaw } from "vue-router";
 import { useAccountStore } from "../store/account";
 import TabsPage from "../views/TabsPage.vue";
-const authCheck: NavigationGuard = function (to, from, next) {
+
+const authCheck: NavigationGuard = async function (to, from, next) {
   if (!useAccountStore().isLoggedIn) {
-    next({ path: "/tabs/login" });
+    if (await useAccountStore().tryReauth()) {
+      next();
+    } else {
+      next({ path: "/tabs/login" });
+    }
   } else {
     next();
   }

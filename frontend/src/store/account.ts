@@ -12,6 +12,30 @@ export const useAccountStore = defineStore("accountStore", {
     isLoggedIn: (state) => state.accountStatus == accountStatus.loggedIn,
   },
   actions: {
+    async tryReauth(): Promise<boolean> {
+      const apiClient = await store.get("APIClient");
+      if (apiClient) {
+        try {
+          const res = await axios.post(
+            import.meta.env.VITE_BACKEND_URL + "/reauth",
+            {
+              APIClient: apiClient,
+            }
+          );
+          if (res.status == 200) {
+            await store.set("APIClient", res.data);
+            this.accountStatus = accountStatus.loggedIn;
+            return true;
+          } else {
+            this.accountStatus = accountStatus.notLoggedIn;
+          }
+        } catch (error) {
+          this.accountStatus = accountStatus.notLoggedIn;
+          console.error("Error loggin in", error);
+        }
+      }
+      return false;
+    },
     async signInUser(username: string, password: string, region: string) {
       try {
         const res = await axios.post(
