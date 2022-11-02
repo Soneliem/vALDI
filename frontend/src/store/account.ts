@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { accountStatus } from "@/models";
+import { accountStatus, Store } from "@/models";
 
 import { Storage } from "@ionic/storage";
 const store = new Storage();
@@ -88,7 +88,7 @@ export const useAccountStore = defineStore("accountStore", {
       await store.remove("APIClient");
       this.accountStatus = accountStatus.notLoggedIn;
     },
-    async getStore() {
+    async getStore(): Promise<Store> {
       try {
         const res = await axios.post(
           import.meta.env.VITE_BACKEND_URL + "/store",
@@ -102,6 +102,7 @@ export const useAccountStore = defineStore("accountStore", {
       } catch (error) {
         console.error("Error getting store", error);
       }
+      return { bundles: [], skins: [], remainingTime: 0 };
     },
   },
 });
