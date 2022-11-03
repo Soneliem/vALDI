@@ -11,13 +11,16 @@
           <ion-title size="large">Account</ion-title>
         </ion-toolbar>
       </ion-header>
-
-      <ExploreContainer name="Account" />
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts" setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+} from "@ionic/vue";
 </script>

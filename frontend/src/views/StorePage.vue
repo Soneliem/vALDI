@@ -22,8 +22,17 @@
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-center" v-if="!isLoading">
-          <ion-col size="auto" v-for="item in store.skins" v-bind:key="item.name">
-            <StoreItem :loading="false" :image="item.image" :name="item.name" :price="item.price"></StoreItem>
+          <ion-col
+            size="auto"
+            v-for="item in store.skins"
+            v-bind:key="item.name"
+          >
+            <StoreItem
+              :loading="false"
+              :image="item.image"
+              :name="item.name"
+              :price="item.price"
+            ></StoreItem>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -35,8 +44,17 @@
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-center" v-if="!isLoading">
-          <ion-col size="auto" v-for="item in store.bundles" v-bind:key="item.name">
-            <BundleItem :loading="false" :image="item.image" :name="item.name" :price="item.price"></BundleItem>
+          <ion-col
+            size="auto"
+            v-for="item in store.bundles"
+            v-bind:key="item.name"
+          >
+            <BundleItem
+              :loading="false"
+              :image="item.image"
+              :name="item.name"
+              :price="item.price"
+            ></BundleItem>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -56,9 +74,9 @@ import {
   IonSegment,
   IonSegmentButton,
   IonIcon,
-  IonLabel
+  IonLabel,
 } from "@ionic/vue";
-import { timeOutline, albumsOutline } from 'ionicons/icons';
+import { timeOutline, albumsOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
 import BundleItem from "@/components/BundleItem.vue";
 import { useAccountStore } from "@/store/account";
@@ -80,6 +98,4 @@ function segmentChanged(ev: CustomEvent) {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

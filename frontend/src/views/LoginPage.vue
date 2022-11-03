@@ -1,28 +1,46 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-
       <ion-card class="card">
         <ion-card-header>
           <ion-card-title>Sign In</ion-card-title>
-          <ion-card-subtitle>Sign in with your Riot credentials</ion-card-subtitle>
+          <ion-card-subtitle
+            >Sign in with your Riot credentials</ion-card-subtitle
+          >
         </ion-card-header>
         <ion-card-content>
           <ion-item-group>
             <ion-item fill="solid">
               <ion-label position="floating">Username</ion-label>
-              <ion-input v-model="form.username" inputmode="email" id="username" required></ion-input>
+              <ion-input
+                v-model="form.username"
+                inputmode="email"
+                id="username"
+                required
+              ></ion-input>
             </ion-item>
 
             <ion-item fill="solid">
               <ion-label position="floating">Password</ion-label>
-              <ion-input type="password" v-model="form.password" id="password" required></ion-input>
+              <ion-input
+                type="password"
+                v-model="form.password"
+                id="password"
+                required
+              ></ion-input>
             </ion-item>
 
             <ion-item>
-              <ion-select interface="popover" placeholder="Select Region" v-model="form.region" type="text">
+              <ion-select
+                interface="popover"
+                placeholder="Select Region"
+                v-model="form.region"
+                type="text"
+              >
                 <ion-select-option value="na">North America</ion-select-option>
-                <ion-select-option value="latam">Latin America</ion-select-option>
+                <ion-select-option value="latam"
+                  >Latin America</ion-select-option
+                >
                 <ion-select-option value="br">Brazil</ion-select-option>
                 <ion-select-option value="eu">Europe</ion-select-option>
                 <ion-select-option value="kr">Korea</ion-select-option>
@@ -35,12 +53,14 @@
                 Sign In
                 <ion-icon slot="end" :icon="logIn"></ion-icon>
               </ion-button>
-              <ion-loading :is-open="isLoading" message="Logging In..."></ion-loading>
+              <ion-loading
+                :is-open="isLoading"
+                message="Logging In..."
+              ></ion-loading>
             </ion-item>
           </ion-item-group>
         </ion-card-content>
       </ion-card>
-
     </ion-content>
   </ion-page>
 </template>
@@ -64,7 +84,7 @@ import {
   IonInput,
   IonIcon,
   useIonRouter,
-  IonLoading
+  IonLoading,
 } from "@ionic/vue";
 import { logIn } from "ionicons/icons";
 import { ref } from "vue";
@@ -85,8 +105,7 @@ async function login() {
   isLoading.value = false;
   if (accountStore.accountStatus === accountStatus.loggedIn) {
     ionRouter.replace("/tabs/store");
-  }
-  else if (accountStore.accountStatus === accountStatus.needsMFA) {
+  } else if (accountStore.accountStatus === accountStatus.needsMFA) {
     alert("MFA Needed!");
   } else {
     alert("Error Signing In");
