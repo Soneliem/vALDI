@@ -2,21 +2,24 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Store</ion-title>
+        <ion-segment @ionChange="segmentChanged" value="daily">
+          <ion-segment-button value="daily">
+            <ion-label>Daily</ion-label>
+            <ion-icon :icon="timeOutline" />
+          </ion-segment-button>
+          <ion-segment-button value="bundles">
+            <ion-label>Bundles</ion-label>
+            <ion-icon :icon="albumsOutline" />
+          </ion-segment-button>
+        </ion-segment>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Store</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-grid>
+      <ion-grid v-if="segment == 'daily'">
         <ion-row class="ion-justify-content-center" v-if="isLoading">
           <ion-col size="auto" v-for="i in 4" v-bind:key="i">
             <StoreItem :loading="true"></StoreItem>
           </ion-col>
-
         </ion-row>
         <ion-row class="ion-justify-content-center" v-if="!isLoading">
           <ion-col size="auto" v-for="item in store.skins" v-bind:key="item.name">
@@ -29,21 +32,39 @@
 </template>
 
 <script lang="ts" setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonGrid, IonCol } from '@ionic/vue';
-import StoreItem from '@/components/StoreItem.vue';
-import { useAccountStore } from '@/store/account';
-import { onMounted, Ref, ref } from 'vue';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonRow,
+  IonGrid,
+  IonCol,
+  IonSegment,
+  IonSegmentButton,
+  IonIcon,
+  IonLabel
+} from "@ionic/vue";
+import { timeOutline, albumsOutline } from 'ionicons/icons';
+import StoreItem from "@/components/StoreItem.vue";
+import { useAccountStore } from "@/store/account";
+import { onMounted, Ref, ref } from "vue";
 import { Store } from "@/models";
 const accountStore = useAccountStore();
 let store: Ref<Store> = ref({ bundles: [], skins: [], remainingTime: 0 });
 const isLoading = ref(true);
+let segment = ref("daily");
 
 onMounted(async () => {
   store.value = await accountStore.getStore();
-  console.log(await accountStore.getStore())
+  console.log(await accountStore.getStore());
   isLoading.value = false;
 });
 
+function segmentChanged(ev: CustomEvent) {
+  segment.value = ev.detail.value;
+}
 </script>
 
 <style scoped>

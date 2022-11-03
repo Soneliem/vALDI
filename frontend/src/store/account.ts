@@ -30,8 +30,7 @@ export const useAccountStore = defineStore("accountStore", {
             this.accountStatus = accountStatus.notLoggedIn;
           }
         } catch (error) {
-          this.accountStatus = accountStatus.notLoggedIn;
-          console.error("Error loggin in", error);
+          console.error("API Client Reauth", error);
         }
       }
       return false;

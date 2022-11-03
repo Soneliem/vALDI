@@ -38,7 +38,11 @@ app.post("/auth", async function (req, res, next) {
 app.post("/reauth", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = WebClient.fromJSON(req.body?.APIClient);
-    await apiClient.refresh();
+    try {
+      await apiClient.refresh();
+    } catch (e) {
+      await apiClient.fromCookie(apiClient.toJSON().cookie.ssid);
+    }
     res.send(apiClient.toJSON());
   } else {
     res.status(400).json("API Client is required.");
