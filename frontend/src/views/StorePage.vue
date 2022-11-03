@@ -27,6 +27,19 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+
+      <ion-grid v-if="segment == 'bundles'">
+        <ion-row class="ion-justify-content-center" v-if="isLoading">
+          <ion-col size="auto">
+            <BundleItem :loading="true"></BundleItem>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center" v-if="!isLoading">
+          <ion-col size="auto" v-for="item in store.bundles" v-bind:key="item.name">
+            <BundleItem :loading="false" :image="item.image" :name="item.name" :price="item.price"></BundleItem>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
@@ -36,7 +49,6 @@ import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonRow,
   IonGrid,
@@ -48,6 +60,7 @@ import {
 } from "@ionic/vue";
 import { timeOutline, albumsOutline } from 'ionicons/icons';
 import StoreItem from "@/components/StoreItem.vue";
+import BundleItem from "@/components/BundleItem.vue";
 import { useAccountStore } from "@/store/account";
 import { onMounted, Ref, ref } from "vue";
 import { Store } from "@/models";
