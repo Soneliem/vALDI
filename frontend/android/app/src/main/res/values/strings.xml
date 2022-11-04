@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">vALDI</string>
+    <string name="title_activity_main">vALDI</string>
+    <string name="package_name">dev.sonel.valdi</string>
+    <string name="custom_url_scheme">dev.sonel.valdi</string>
+</resources>

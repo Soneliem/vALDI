@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-card class="card">
-        <ion-card-header>
+        <ion-card-header class="ion-margin">
           <ion-card-title>Sign In</ion-card-title>
           <ion-card-subtitle
             >Sign in with your Riot credentials</ion-card-subtitle
@@ -10,9 +10,10 @@
         </ion-card-header>
         <ion-card-content>
           <ion-item-group>
-            <ion-item>
+            <ion-item fill="solid" class="ion-margin">
               <ion-label position="floating">Username</ion-label>
               <ion-input
+                appAutofill
                 v-model="form.username"
                 inputmode="email"
                 id="username"
@@ -20,9 +21,10 @@
               ></ion-input>
             </ion-item>
 
-            <ion-item>
+            <ion-item fill="solid" class="ion-margin">
               <ion-label position="floating">Password</ion-label>
               <ion-input
+                appAutofill
                 type="password"
                 v-model="form.password"
                 id="password"
@@ -30,8 +32,9 @@
               ></ion-input>
             </ion-item>
 
-            <ion-item>
+            <ion-item fill="solid" class="ion-margin">
               <ion-select
+                appAutofill
                 interface="popover"
                 placeholder="Select Region"
                 v-model="form.region"
@@ -48,7 +51,7 @@
               </ion-select>
             </ion-item>
 
-            <ion-item>
+            <ion-item class="ion-margin">
               <ion-button type="submit" @click="login()">
                 Sign In
                 <ion-icon slot="end" :icon="logIn"></ion-icon>

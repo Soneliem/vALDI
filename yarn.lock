@@ -914,6 +914,11 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
+"@capacitor/android@4.2.0":
+  "integrity" "sha512-LWZhM31DoQuNSW8ZGslJ8gZfOAZS2A5TLq30HP1bn0OQTJGvOFIizQysraVRSOOq5FRptykf2nZWu6WEwoKMlA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-4.2.0.tgz"
+  "version" "4.2.0"
+
 "@capacitor/app@4.0.1":
   "integrity" "sha512-frPft9TMJL70jWq5jmxwGSBddZVvsWxX5Agj2i19WJerk37aTgljB05HRr/YLg6mF1G/NIXmmFJZDY8MEgirDg=="
   "resolved" "https://registry.npmjs.org/@capacitor/app/-/app-4.0.1.tgz"
@@ -2083,7 +2088,7 @@
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.3"
 
-"backend@file:C:\\Users\\sonel\\Documents\\GitHub\\vALDI\\backend":
+"backend@file:c:\\Users\\sonel\\Documents\\GitHub\\vALDI\\backend":
   "resolved" "file:backend"
   "version" "0.0.2"
   dependencies:
@@ -3446,10 +3451,11 @@
   "resolved" "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
   "version" "0.5.2"
 
-"frontend@file:C:\\Users\\sonel\\Documents\\GitHub\\vALDI\\frontend":
+"frontend@file:c:\\Users\\sonel\\Documents\\GitHub\\vALDI\\frontend":
   "resolved" "file:frontend"
   "version" "0.0.2"
   dependencies:
+    "@capacitor/android" "4.2.0"
     "@capacitor/app" "4.0.1"
     "@capacitor/core" "4.2.0"
     "@capacitor/haptics" "4.0.1"

@@ -20,7 +20,7 @@
         </ion-card-subtitle>
       </ion-card-header>
     </ion-card>
-    <ion-card v-if="!loading" style="width: fit-content; max-width: 1080px">
+    <ion-card v-if="!loading" style="width: fit-content; max-width: 1000px">
       <img class="image" :alt="name" :src="image" />
       <ion-card-header>
         <ion-card-title>{{ name }}</ion-card-title>
