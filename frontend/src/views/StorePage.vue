@@ -59,6 +59,7 @@
         </ion-row>
       </ion-grid>
     </ion-content>
+    <ion-progress-bar :value="progress"></ion-progress-bar>
   </ion-page>
 </template>
 
@@ -75,21 +76,29 @@ import {
   IonSegmentButton,
   IonIcon,
   IonLabel,
+  IonProgressBar,
 } from "@ionic/vue";
 import { timeOutline, albumsOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
 import BundleItem from "@/components/BundleItem.vue";
 import { useAccountStore } from "@/store/account";
-import { onMounted, Ref, ref } from "vue";
+import { onMounted, Ref, ref, watch } from "vue";
 import { Store } from "@/models";
+
 const accountStore = useAccountStore();
 let store: Ref<Store> = ref({ bundles: [], skins: [], remainingTime: 0 });
 const isLoading = ref(true);
 let segment = ref("daily");
+let progress = ref(60);
+watch(
+  () => store.value.remainingTime,
+  (remainingTime) => {
+    progress.value = remainingTime / 86400;
+  }
+);
 
 onMounted(async () => {
   store.value = await accountStore.getStore();
-  console.log(await accountStore.getStore());
   isLoading.value = false;
 });
 

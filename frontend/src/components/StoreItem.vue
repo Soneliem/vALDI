@@ -1,8 +1,11 @@
 <template>
   <div>
     <ion-card v-if="loading" style="width: fit-content">
-      <ion-card-content class="ion-padding imageWrapper">
-        <ion-skeleton-text :animated="true" class="image"></ion-skeleton-text>
+      <ion-card-content>
+        <ion-skeleton-text
+          :animated="true"
+          class="skeletonImage"
+        ></ion-skeleton-text>
       </ion-card-content>
       <ion-card-header>
         <ion-card-title>
@@ -19,9 +22,9 @@
         </ion-card-subtitle>
       </ion-card-header>
     </ion-card>
-    <ion-card v-if="!loading" style="width: fit-content">
-      <ion-card-content class="ion-padding imageWrapper"
-        ><img class="image" :alt="name" :src="image" />
+    <ion-card v-if="!loading" style="width: auto">
+      <ion-card-content
+        ><img class="image ion-margin" :alt="name" :src="image" />
       </ion-card-content>
       <ion-card-header>
         <ion-card-title>{{ name }}</ion-card-title>
@@ -57,7 +60,7 @@ defineProps<{
 
 <style scoped>
 ion-card-content {
-  background: linear-gradient(270deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background: linear-gradient(270deg, #ee7752, #e73c7e, #1e8fb8, #23d5ab);
   animation: gradient 10s ease infinite;
   background-size: 400% 400%;
 }
@@ -76,20 +79,14 @@ ion-card-content {
   }
 }
 
-.imageWrapper {
-  width: 544px;
-  height: 188px;
-  overflow: hidden;
+.skeletonImage {
+  width: 400px;
+  height: 150px;
 }
 
 .image {
-  max-width: 512px;
+  width: auto;
   max-height: 156px;
-  display: block;
-  margin: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .coin {

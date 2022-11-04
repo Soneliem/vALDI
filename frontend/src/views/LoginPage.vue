@@ -10,7 +10,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-item-group>
-            <ion-item fill="solid">
+            <ion-item>
               <ion-label position="floating">Username</ion-label>
               <ion-input
                 v-model="form.username"
@@ -20,7 +20,7 @@
               ></ion-input>
             </ion-item>
 
-            <ion-item fill="solid">
+            <ion-item>
               <ion-label position="floating">Password</ion-label>
               <ion-input
                 type="password"
