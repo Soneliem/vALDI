@@ -86,8 +86,10 @@ ion-card-content {
   max-width: 512px;
   max-height: 156px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .coin {
