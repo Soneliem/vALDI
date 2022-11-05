@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ion-card v-if="loading" style="width: fit-content">
+    <ion-card v-if="loading" style="width: auto">
       <ion-card-content>
         <ion-skeleton-text
           :animated="true"

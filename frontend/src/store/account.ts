@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { accountStatus, Store } from "@/models";
 
 import { Storage } from "@ionic/storage";
@@ -56,7 +56,12 @@ export const useAccountStore = defineStore("accountStore", {
         }
       } catch (error: any) {
         this.accountStatus = accountStatus.notLoggedIn;
-        console.error("Error logging in:", error.toString());
+        console.error(
+          "Error logging in:",
+          error.toJSON().toString(),
+          "url:",
+          import.meta.env.VITE_BACKEND_URL + "/auth"
+        );
       }
     },
     async submitMFA(code: string) {
