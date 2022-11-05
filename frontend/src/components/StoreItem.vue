@@ -1,42 +1,48 @@
 <template>
-  <div>
-    <ion-card v-if="loading" style="width: auto">
-      <ion-card-content>
+  <ion-card v-if="loading" style="width: auto">
+    <ion-card-content>
+      <ion-skeleton-text
+        :animated="true"
+        class="skeletonImage"
+      ></ion-skeleton-text>
+    </ion-card-content>
+    <ion-card-header>
+      <ion-card-title>
         <ion-skeleton-text
           :animated="true"
-          class="skeletonImage"
+          style="width: 30%"
         ></ion-skeleton-text>
-      </ion-card-content>
-      <ion-card-header>
-        <ion-card-title>
-          <ion-skeleton-text
-            :animated="true"
-            style="width: 30%"
-          ></ion-skeleton-text>
-        </ion-card-title>
-        <ion-card-subtitle>
-          <ion-skeleton-text
-            :animated="true"
-            style="width: 10%"
-          ></ion-skeleton-text>
-        </ion-card-subtitle>
-      </ion-card-header>
-    </ion-card>
-    <ion-card v-if="!loading" style="width: auto">
-      <ion-card-content
-        ><img class="image ion-margin" :alt="name" :src="image" />
-      </ion-card-content>
-      <ion-card-header>
-        <ion-card-title>{{ name }}</ion-card-title>
-        <ion-card-subtitle
-          ><img
-            class="coin"
-            src="https://media.valorant-api.com/currencies/85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741/displayicon.png"
-          /><b class="ion-text-center">{{ price }}</b></ion-card-subtitle
-        >
-      </ion-card-header>
-    </ion-card>
-  </div>
+      </ion-card-title>
+      <ion-card-subtitle>
+        <ion-skeleton-text
+          :animated="true"
+          style="width: 10%"
+        ></ion-skeleton-text>
+      </ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  <ion-card v-if="!loading" style="width: auto" @click="show = true">
+    <ion-card-content class="ion-padding">
+      <img class="image" :alt="name" :class="{ show: show }" :src="image" />
+    </ion-card-content>
+    <ion-card-header>
+      <ion-card-title v-if="show">{{ name }}</ion-card-title>
+      <ion-card-title v-if="!show">Click to Reveal</ion-card-title>
+      <ion-card-subtitle
+        ><img
+          class="coin"
+          src="https://media.valorant-api.com/currencies/85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741/displayicon.png"
+        /><b
+          v-if="show"
+          class="ion-text-center"
+          style="vertical-align: bottom"
+          >{{ price }}</b
+        ><b v-if="!show" class="ion-text-center" style="vertical-align: bottom"
+          >???</b
+        ></ion-card-subtitle
+      >
+    </ion-card-header>
+  </ion-card>
 </template>
 
 <script lang="ts" setup>
@@ -48,7 +54,7 @@ import {
   IonCardContent,
   IonSkeletonText,
 } from "@ionic/vue";
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 defineProps<{
   name?: string;
@@ -56,6 +62,8 @@ defineProps<{
   price?: number;
   loading?: boolean;
 }>();
+
+const show = ref(false);
 </script>
 
 <style scoped>
@@ -87,6 +95,7 @@ ion-card-content {
 .image {
   width: auto;
   max-height: 156px;
+  visibility: hidden;
 }
 
 .coin {
@@ -94,5 +103,24 @@ ion-card-content {
   height: 20px;
   margin-right: 5px;
   vertical-align: middle;
+}
+
+.show {
+  animation: bounce-in 0.5s;
+  visibility: visible;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>
