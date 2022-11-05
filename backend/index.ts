@@ -12,6 +12,7 @@ var allowlist = [
   "http://localhost:8080",
   "http://localhost:8100",
   "https://valdi.sonel.dev",
+  "http://valdi.sonel.dev",
   "valdi-soneliem.vercel.app",
 ];
 const options: cors.CorsOptions = {

@@ -54,9 +54,9 @@ export const useAccountStore = defineStore("accountStore", {
         } else {
           this.accountStatus = accountStatus.notLoggedIn;
         }
-      } catch (error) {
+      } catch (error: any) {
         this.accountStatus = accountStatus.notLoggedIn;
-        console.error("Error loggin in", error);
+        console.error("Error logging in:", error.toString());
       }
     },
     async submitMFA(code: string) {
