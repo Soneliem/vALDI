@@ -36,6 +36,17 @@ app.post("/auth", async function (req, res, next) {
   }
 });
 
+app.post("/mfa", async function (req, res, next) {
+  if (req.body?.APIClient && req.body?.code) {
+    const apiClient = WebClient.fromJSON(req.body?.APIClient);
+    await apiClient.verify(req.body.code);
+
+    res.send(apiClient.toJSON());
+  } else {
+    res.status(400).json("API Client and MFA code is required.");
+  }
+});
+
 app.post("/reauth", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = WebClient.fromJSON(req.body?.APIClient);

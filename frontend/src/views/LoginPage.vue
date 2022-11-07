@@ -64,6 +64,26 @@
           </ion-item-group>
         </ion-card-content>
       </ion-card>
+      <ion-modal ref="modal" trigger="open-modal" :is-open="mfaOpen">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Multi Factor Authentication</ion-title>
+            <ion-buttons slot="start">
+              <ion-button @click="mfaOpen = false">Back</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <p class="ion-padding-horizontal">
+            A code has been sent to your email. Please enter it below.
+          </p>
+          <ion-item>
+            <ion-label position="stacked">Code</ion-label>
+            <ion-input type="number" placeholder="000000"></ion-input>
+          </ion-item>
+          <ion-button @click="submitMFA()">Submit</ion-button>
+        </ion-content>
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
@@ -88,6 +108,8 @@ import {
   IonIcon,
   useIonRouter,
   IonLoading,
+  IonToolbar,
+  IonModal,
 } from "@ionic/vue";
 import { logIn } from "ionicons/icons";
 import { ref } from "vue";
@@ -99,9 +121,10 @@ const form = {
   password: "",
   region: "na",
 };
+const code = ref("");
 
 const isLoading = ref(false);
-
+const mfaOpen = ref(true);
 async function login() {
   isLoading.value = true;
   await accountStore.signInUser(form.username, form.password, form.region);
@@ -109,7 +132,20 @@ async function login() {
   if (accountStore.accountStatus === accountStatus.loggedIn) {
     ionRouter.replace("/tabs/store");
   } else if (accountStore.accountStatus === accountStatus.needsMFA) {
-    alert("MFA Needed!");
+    mfaOpen.value = true;
+  } else {
+    alert("Error Signing In");
+  }
+}
+
+async function submitMFA() {
+  isLoading.value = true;
+  await accountStore.submitMFA(code.value);
+  isLoading.value = false;
+  if (accountStore.accountStatus === accountStatus.loggedIn) {
+    ionRouter.replace("/tabs/store");
+  } else if (accountStore.accountStatus === accountStatus.needsMFA) {
+    mfaOpen.value = true;
   } else {
     alert("Error Signing In");
   }

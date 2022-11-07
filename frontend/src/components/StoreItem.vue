@@ -22,7 +22,7 @@
     </ion-card-header>
   </ion-card>
   <ion-card v-if="!loading" style="width: auto" @click="show = true">
-    <ion-card-content class="ion-padding">
+    <ion-card-content class="ion-padding" :class="{ rgb: show }">
       <img class="image" :alt="name" :class="{ show: show }" :src="image" />
     </ion-card-content>
     <ion-card-header>
@@ -67,7 +67,7 @@ const show = ref(false);
 </script>
 
 <style scoped>
-ion-card-content {
+.rgb {
   background: linear-gradient(270deg, #ee7752, #e73c7e, #1e8fb8, #23d5ab);
   animation: gradient 10s ease infinite;
   background-size: 400% 400%;
@@ -106,7 +106,7 @@ ion-card-content {
 }
 
 .show {
-  animation: bounce-in 0.5s;
+  animation: bounce-in 1s;
   visibility: visible;
 }
 .bounce-leave-active {
