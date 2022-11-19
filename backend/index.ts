@@ -28,22 +28,22 @@ app.post("/auth", async function (req, res, next) {
     const apiClient = new WebClient({ region: req.body.region });
     await apiClient.login(req.body.username, req.body.password);
     if (apiClient.isMultifactor) {
-      res.status(511).send(apiClient.toJSON());
+      return res.status(202).send(apiClient.toJSON());
     }
-    res.send(apiClient.toJSON());
+    return res.send(apiClient.toJSON());
   } else {
-    res.status(400).json("Username, password, and region are required.");
+    return res.status(400).json("Username, password, and region are required.");
   }
 });
 
 app.post("/mfa", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.code) {
-    const apiClient = WebClient.fromJSON(req.body?.APIClient);
+    const apiClient = WebClient.fromJSON(req.body.APIClient);
     await apiClient.verify(req.body.code);
 
-    res.send(apiClient.toJSON());
+    return res.send(apiClient.toJSON());
   } else {
-    res.status(400).json("API Client and MFA code is required.");
+    return res.status(400).json("API Client and MFA code is required.");
   }
 });
 

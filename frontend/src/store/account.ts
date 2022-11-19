@@ -48,7 +48,7 @@ export const useAccountStore = defineStore("accountStore", {
         if (res.status == 200) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.loggedIn;
-        } else if (res.status == 205) {
+        } else if (res.status == 202) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.needsMFA;
         } else {
@@ -65,27 +65,29 @@ export const useAccountStore = defineStore("accountStore", {
       }
     },
     async submitMFA(code: string) {
-      try {
-        const res = await axios.post(
-          import.meta.env.VITE_BACKEND_URL + "/auth/mfa",
-          {
-            code: code,
-            APIClient: await store.get("APIClient"),
+      const apiClient = await store.get("APIClient");
+      if (apiClient) {
+        try {
+          const res = await axios.post(
+            import.meta.env.VITE_BACKEND_URL + "/mfa",
+            {
+              code: code,
+              APIClient: apiClient,
+            }
+          );
+          if (res.status == 200) {
+            await store.set("APIClient", res.data);
+            this.accountStatus = accountStatus.loggedIn;
+          } else if (res.status == 205) {
+            await store.set("APIClient", res.data);
+            this.accountStatus = accountStatus.needsMFA;
+          } else {
+            this.accountStatus = accountStatus.notLoggedIn;
           }
-        );
-        if (res.status == 200) {
-          await store.set("APIClient", res.data);
-          this.accountStatus = accountStatus.loggedIn;
-        } else if (res.status == 205) {
-          await store.set("APIClient", res.data);
-          this.accountStatus = accountStatus.needsMFA;
-        } else {
+        } catch (error) {
           this.accountStatus = accountStatus.notLoggedIn;
+          console.error("Error submitting MFA", error);
         }
-        await store.set("APIClient", res.data);
-      } catch (error) {
-        this.accountStatus = accountStatus.notLoggedIn;
-        console.error("Error submitting MFA", error);
       }
     },
     async signoutUser() {

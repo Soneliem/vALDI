@@ -79,9 +79,13 @@
           </p>
           <ion-item>
             <ion-label position="stacked">Code</ion-label>
-            <ion-input type="number" placeholder="000000"></ion-input>
+            <ion-input
+              type="number"
+              placeholder="000000"
+              v-model="code"
+            ></ion-input>
           </ion-item>
-          <ion-button @click="submitMFA()">Submit</ion-button>
+          <ion-button type="submit" @click="submitMFA()">Submit</ion-button>
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -110,6 +114,9 @@ import {
   IonLoading,
   IonToolbar,
   IonModal,
+  IonHeader,
+  IonButtons,
+  IonTitle,
 } from "@ionic/vue";
 import { logIn } from "ionicons/icons";
 import { ref } from "vue";
@@ -124,12 +131,13 @@ const form = {
 const code = ref("");
 
 const isLoading = ref(false);
-const mfaOpen = ref(true);
+const mfaOpen = ref(false);
 async function login() {
   isLoading.value = true;
   await accountStore.signInUser(form.username, form.password, form.region);
   isLoading.value = false;
   if (accountStore.accountStatus === accountStatus.loggedIn) {
+    mfaOpen.value = false;
     ionRouter.replace("/tabs/store");
   } else if (accountStore.accountStatus === accountStatus.needsMFA) {
     mfaOpen.value = true;
