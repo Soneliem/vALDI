@@ -137,7 +137,6 @@ async function login() {
   await accountStore.signInUser(form.username, form.password, form.region);
   isLoading.value = false;
   if (accountStore.accountStatus === accountStatus.loggedIn) {
-    mfaOpen.value = false;
     ionRouter.replace("/tabs/store");
   } else if (accountStore.accountStatus === accountStatus.needsMFA) {
     mfaOpen.value = true;

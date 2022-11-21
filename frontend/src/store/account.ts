@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { accountStatus, Store } from "@/models";
 
 import { Storage } from "@ionic/storage";
@@ -78,7 +78,7 @@ export const useAccountStore = defineStore("accountStore", {
           if (res.status == 200) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.loggedIn;
-          } else if (res.status == 205) {
+          } else if (res.status == 202) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.needsMFA;
           } else {
