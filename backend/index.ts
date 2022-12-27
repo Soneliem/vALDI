@@ -17,11 +17,12 @@ var allowlist = [
 ];
 const options: cors.CorsOptions = {
   origin: allowlist,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(options));
 app.use(express.json());
-app.options("*", cors());
+app.options("*", cors(options));
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
