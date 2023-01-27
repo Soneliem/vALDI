@@ -94,6 +94,9 @@ export const useAccountStore = defineStore("accountStore", {
       await store.remove("APIClient");
       this.accountStatus = accountStatus.notLoggedIn;
     },
+    async markSignedOut() {
+      this.accountStatus = accountStatus.notLoggedIn;
+    },
     async getStore(): Promise<Store> {
       try {
         const res = await axios.post(

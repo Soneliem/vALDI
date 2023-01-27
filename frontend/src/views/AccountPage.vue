@@ -10,10 +10,6 @@
             Sign Out
             <ion-icon slot="end" :icon="logIn"></ion-icon>
           </ion-button>
-          <ion-loading
-            :is-open="isLoading"
-            message="Logging Out..."
-          ></ion-loading>
         </ion-card-content>
       </ion-card>
     </ion-content>
@@ -29,7 +25,7 @@ import {
   IonButton,
   IonIcon,
   useIonRouter,
-  IonLoading,
+  loadingController,
 } from "@ionic/vue";
 import { logIn } from "ionicons/icons";
 import { ref } from "vue";
@@ -37,12 +33,15 @@ import { useAccountStore } from "../store/account";
 const accountStore = useAccountStore();
 const ionRouter = useIonRouter();
 
-const isLoading = ref(false);
+const isLoading = ref();
 
 async function logout() {
-  isLoading.value = true;
+  isLoading.value = await loadingController.create({
+    message: "Logging In...",
+  });
+  isLoading.value.present();
   await accountStore.signoutUser();
-  isLoading.value = false;
+  isLoading.value.dismiss();
   ionRouter.replace("/tabs/login");
 }
 </script>

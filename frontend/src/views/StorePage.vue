@@ -77,6 +77,7 @@ import {
   IonIcon,
   IonLabel,
   IonProgressBar,
+  useIonRouter,
 } from "@ionic/vue";
 import { timeOutline, albumsOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
@@ -90,6 +91,7 @@ let store: Ref<Store> = ref({ bundles: [], skins: [], remainingTime: 0 });
 const isLoading = ref(true);
 let segment = ref("daily");
 let progress = ref(60);
+
 watch(
   () => store.value.remainingTime,
   (remainingTime) => {
@@ -99,6 +101,12 @@ watch(
 
 onMounted(async () => {
   store.value = await accountStore.getStore();
+  console.log(store.value);
+  if (store.value.skins.length == 0) {
+    await accountStore.markSignedOut();
+    await accountStore.tryReauth();
+    window.location.reload();
+  }
   isLoading.value = false;
 });
 

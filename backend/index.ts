@@ -78,6 +78,9 @@ app.post("/store", async function (req, res, next) {
       valAPI.Bundles.get(),
     ]);
 
+    if (!rawStore?.data?.SkinsPanelLayout?.SingleItemOffers)
+      return res.status(400).json("Store is not available.");
+
     // Iterate through the store for normal skins
     const skins: Skin[] = await Promise.all(
       rawStore.data.SkinsPanelLayout.SingleItemOffers.map(

@@ -2,7 +2,10 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar
+        slot="bottom"
+        v-if="$router.currentRoute.value.path != '/tabs/login'"
+      >
         <ion-tab-button tab="store" href="/tabs/store">
           <ion-icon :icon="basketOutline" />
           <ion-label>Store</ion-label>
@@ -17,8 +20,7 @@
   </ion-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import {
   IonTabBar,
   IonTabButton,
@@ -29,23 +31,4 @@ import {
   IonRouterOutlet,
 } from "@ionic/vue";
 import { basketOutline, personOutline } from "ionicons/icons";
-
-export default defineComponent({
-  name: "TabsPage",
-  components: {
-    IonLabel,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonPage,
-    IonRouterOutlet,
-  },
-  setup() {
-    return {
-      basketOutline,
-      personOutline,
-    };
-  },
-});
 </script>
