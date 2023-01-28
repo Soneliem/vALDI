@@ -10,6 +10,10 @@
           <ion-icon :icon="basketOutline" />
           <ion-label>Store</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="wishlist" href="/wishlist">
+          <ion-icon :icon="basketOutline" />
+          <ion-label>Whishlist</ion-label>
+        </ion-tab-button>
 
         <ion-tab-button tab="account" href="/account">
           <ion-icon :icon="personOutline" />

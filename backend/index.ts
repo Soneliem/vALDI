@@ -1,8 +1,12 @@
-import { Client as WebClient } from "@valapi/web-client";
-import { Client as ValAPI } from "@valapi/valorant-api.com";
+import client from "@valapi/web-client";
+import ValAPI from "@valapi/valorant-api.com";
 import express from "express";
 import cors from "cors";
 import { Bundle, Skin, Store } from "./models";
+import { PrismaClient, Prisma } from "@prisma/client";
+import e from "express";
+
+const prisma = new PrismaClient();
 const app = express();
 
 var allowlist = [
@@ -26,9 +30,9 @@ app.options("*", cors(options));
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
-    const apiClient = new WebClient({ region: req.body.region });
+    const apiClient = new client({ region: req.body.region });
     await apiClient.login(req.body.username, req.body.password);
-    if (apiClient.isMultifactor) {
+    if (apiClient.isMultifactorAccount) {
       return res.status(202).send(apiClient.toJSON());
     }
     return res.send(apiClient.toJSON());
@@ -39,7 +43,7 @@ app.post("/auth", async function (req, res, next) {
 
 app.post("/mfa", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.code) {
-    const apiClient = WebClient.fromJSON(req.body.APIClient);
+    const apiClient = client.fromJSON(req.body.APIClient);
     await apiClient.verify(req.body.code);
 
     return res.send(apiClient.toJSON());
@@ -48,9 +52,44 @@ app.post("/mfa", async function (req, res, next) {
   }
 });
 
+app.post("/wishlist", async function (req, res, next) {
+  if (req.body?.APIClient && req.body?.skinId) {
+    const apiClient = client.fromJSON(req.body?.APIClient);
+    const dbUser = await prisma.user.findUnique({
+      where: {
+        id: apiClient.getSubject(),
+      },
+    });
+    if (!dbUser) {
+      await prisma.user.create({
+        data: {
+          id: apiClient.getSubject(),
+          client: JSON.parse(JSON.stringify(apiClient.toJSON())),
+          skins: [req.body?.skinId as string],
+        },
+      });
+    } else {
+      const skins = dbUser.skins;
+      if (!skins.includes(req.body?.skinId as string)) {
+        skins.push(req.body?.skinId as string);
+        await prisma.user.update({
+          where: {
+            id: apiClient.getSubject(),
+          },
+          data: {
+            skins: skins,
+          },
+        });
+      }
+    }
+  } else {
+    return res.status(400).json("API Client and skinID is required.");
+  }
+});
+
 app.post("/reauth", async function (req, res, next) {
   if (req.body?.APIClient) {
-    const apiClient = WebClient.fromJSON(req.body?.APIClient);
+    const apiClient = client.fromJSON(req.body?.APIClient);
     try {
       await apiClient.refresh();
     } catch (e) {
@@ -64,15 +103,11 @@ app.post("/reauth", async function (req, res, next) {
 
 app.post("/store", async function (req, res, next) {
   if (req.body?.APIClient) {
-    const apiClient = WebClient.fromJSON(req.body?.APIClient);
+    const apiClient = client.fromJSON(req.body?.APIClient);
     const valAPI = new ValAPI({});
     // Get store, offers and skin info
     const [rawStore, offers, apiSkins, apiBundles] = await Promise.all([
-      apiClient.Store.getStorefront(
-        await (
-          await apiClient.Player.getUserInfo()
-        ).data.sub
-      ),
+      apiClient.Store.getStorefront(apiClient.getSubject()),
       apiClient.Store.getOffers(),
       valAPI.Weapons.getSkinLevels(),
       valAPI.Bundles.get(),

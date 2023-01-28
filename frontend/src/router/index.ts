@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/StorePage.vue"),
         beforeEnter: authCheck,
       },
+      {
+        path: "wishlist",
+        component: () => import("@/views/WishlistPage.vue"),
+        beforeEnter: authCheck,
+      },
     ],
   },
 ];
