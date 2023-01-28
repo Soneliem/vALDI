@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import { useAccountStore } from "@/store/account";
 import { IonicVue } from "@ionic/vue";
 import { createPinia } from "pinia";
 /* Core CSS required for Ionic components to work properly */
@@ -26,7 +25,6 @@ import "./theme/variables.css";
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const accountsStore = useAccountStore();
 router.isReady().then(() => {
   app.mount("#app");
 });

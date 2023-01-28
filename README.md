@@ -21,26 +21,32 @@
 
 ## About The Project
 
-"Who Am I Up Against?" (WAIUA) is simple Windows app that lets you see the ranks, recent game stats and other info of players in a live Valorant match while you're still playing it. Below are the current features that are in the app.
+A simple cross-platform web and mobile app to view your Valorant store. Created by Soneliem.
+
+Name derived after my favourite grocery store that overworks and understaffs its workers.
 
 ### Current Features
 
-|View Store|View Bundle|Fun* Reveal Mechanic|
+|View Store|View Bundle|Fun* Reveal Mechanic|Mobile App|
 |:---:|:---:|:---:|:---:|
-|![rank](assets/store.png)|![rank](assets/bundle.png)|![rank](assets/reveal/.png)|
+|![store](assets/main.png)|![bundle](assets/bundle.png)|![reveal](assets/reveal.png)|![app](assets/mobile.png)|
+
+*Fun is subjective
 
 ## FAQ
 
-### Are my credentials stored anywhere?
+### Are my credentials stored on servers?
 
-Yes, just your access tokens which are stored on your own device
+No, but your access tokens are stored on your own device's browser
 
 ## Tech Stack
 
-**Client:** Ionic + Vite + Vue + Typescript +
+**Client:** Ionic + Vite + Vue + Typescript >
 Deployed on web with [Vercel](https://vercel.com)
 
-**Server:** Node + Express + Deployed on [Qoddi](https://qoddi.com/)
+**Server:** NodeJS + Express > Deployed on [Qoddi](https://qoddi.com/)
+
+Thank you to [Qoddi](https://qoddi.com/) for providing free hosting this project
 
 ## License
 
@@ -51,8 +57,7 @@ Deployed on web with [Vercel](https://vercel.com)
 Clone the project
 
 ```bash
-  git clone https://link-to-project
-  cd my-project
+  git clone https://github.com/Soneliem/vALDI.git
 ```
 
 Install dependencies
@@ -74,7 +79,6 @@ This repo is a Yarn workspace (monorepo), so you can also run the server and cli
   yarn run frontend
 ```
 
-
 ## Contributing
 
 Contributions are always welcome! Please use the `development` branch for PRs
@@ -92,5 +96,6 @@ Contributions are always welcome! Please use the `development` branch for PRs
 - [valorant.ts](https://github.com/KTNG-3/valorant-api) for the API wrapper
 
 ## DISCLAIMER
+
 THIS PROJECT IS NOT ASSOCIATED OR ENDORSED BY RIOT GAMES. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
 By using this application, you agree that you, the individual, are knowingly accessing all information required to be displayed.
