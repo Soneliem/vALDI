@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865302377509",
+    "project_id": "valdi-bfdee",
+    "storage_bucket": "valdi-bfdee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865302377509:android:f9641b6bd50adba6cdbbcc",
+        "android_client_info": {
+          "package_name": "dev.sonel.valdi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865302377509-0v6tdo2g5qbbvjejfc5im0lt5r7kts73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZV61b5opmXhm47xkU3ugfZMCLMl_S7YU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865302377509-0v6tdo2g5qbbvjejfc5im0lt5r7kts73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
