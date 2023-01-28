@@ -101,7 +101,6 @@ watch(
 
 onMounted(async () => {
   store.value = await accountStore.getStore();
-  console.log(store.value);
   if (store.value.skins.length == 0) {
     await accountStore.markSignedOut();
     await accountStore.tryReauth();

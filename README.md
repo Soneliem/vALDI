@@ -1,20 +1,21 @@
 <p align="center">
   <a href="https://github.com/Soneliem/WAIUA">
-    <img src="assets/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo.png" alt="Logo" width="90" height="90">
   </a>
 </p>
-<h3 align="center">vALDI</h3>
-<h4 align="center">Valorant Store Checker</h4>
+<h3 align="center">vALDI - a Valorant store checker</h3>
 <a href="https://valdi.sonel.dev"><h1 align="center">valdi.sonel.dev</h1></a>
 
   <p align="center">
     A cross-platform web and mobile app to view your valorant store</p>
     <p align="center">
     <a href="https://discord.gg/X7CYCeZSRK">
-      <img alt="Discord" src="https://img.shields.io/discord/881790284613185546?color=blue&label=discord">
+      <img alt="Discord" src="https://img.shields.io/discord/881790284613185546?color=blue&label=discord&logo=discord">
     </a>
-    <img alt="GitHub" src="https://img.shields.io/github/license/Soneliem/vALDI?color=blue">
-    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev?color=blue">
+    <img alt="GitHub" src="https://img.shields.io/github/license/Soneliem/vALDI?logo=github">
+    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev&logo=vue.js">
+    <img alt="Vercel" src="https://therealsujitk-vercel-badge.vercel.app/?app=valdi-soneliem&logo=true">
+    <img alt="Play Store" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Ddev.sonel.valdi%26l%3DAndroid%26m%3D%24version&logo=google-play">
   <br />
 
 ![Screenshot](assets/main.png)
@@ -27,9 +28,19 @@ Name derived after my favourite grocery store that overworks and understaffs its
 
 ### Current Features
 
-|View Store|View Bundle|Fun* Reveal Mechanic|Mobile App|
+|View Store|View Bundle|Fun Reveal Mechanic*|Mobile App|
 |:---:|:---:|:---:|:---:|
 |![store](assets/main.png)|![bundle](assets/bundle.png)|![reveal](assets/reveal.png)|![app](assets/mobile.png)|
+
+#### Other features
+
+- [x] MFA Support
+- [x] Published to Play Store
+
+#### Planned Features
+
+- [ ] Night Market
+- [ ] Multi Account Support
 
 *Fun is subjective
 
@@ -48,9 +59,9 @@ Deployed on web with [Vercel](https://vercel.com)
 
 Thank you to [Qoddi](https://qoddi.com/) for providing free hosting this project
 
-## License
+## Why?
 
-[MIT](https://choosealicense.com/licenses/mit/)
+Making a store checker is a rite of passage for any Valorant App Dev. I am simply following the tradition. I also wanted to learn more about Ionic and the Android app deployment, so this was a good opportunity to do so.
 
 ## Run Locally
 

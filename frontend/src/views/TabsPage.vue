@@ -4,14 +4,14 @@
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar
         slot="bottom"
-        v-if="$router.currentRoute.value.path != '/tabs/login'"
+        v-if="$router.currentRoute.value.path != '/login'"
       >
-        <ion-tab-button tab="store" href="/tabs/store">
+        <ion-tab-button tab="store" href="/store">
           <ion-icon :icon="basketOutline" />
           <ion-label>Store</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="account" href="/tabs/account">
+        <ion-tab-button tab="account" href="/account">
           <ion-icon :icon="personOutline" />
           <ion-label>Account</ion-label>
         </ion-tab-button>
