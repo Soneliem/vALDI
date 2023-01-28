@@ -1,58 +1,74 @@
 <p align="center">
   <a href="https://github.com/Soneliem/WAIUA">
-    <img src="assets/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo.png" alt="Logo" width="90" height="90">
   </a>
 </p>
-<h3 align="center">vALDI</h3>
-<h4 align="center">Valorant Store Checker</h4>
+<h3 align="center">vALDI - a Valorant store checker</h3>
 <a href="https://valdi.sonel.dev"><h1 align="center">valdi.sonel.dev</h1></a>
 
   <p align="center">
     A cross-platform web and mobile app to view your valorant store</p>
     <p align="center">
     <a href="https://discord.gg/X7CYCeZSRK">
-      <img alt="Discord" src="https://img.shields.io/discord/881790284613185546?color=blue&label=discord">
+      <img alt="Discord" src="https://img.shields.io/discord/881790284613185546?color=blue&label=discord&logo=discord">
     </a>
-    <img alt="GitHub" src="https://img.shields.io/github/license/Soneliem/vALDI?color=blue">
-    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev?color=blue">
+    <img alt="GitHub" src="https://img.shields.io/github/license/Soneliem/vALDI?logo=github">
+    <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev&logo=vue.js">
+    <img alt="Vercel" src="https://therealsujitk-vercel-badge.vercel.app/?app=valdi-soneliem&logo=true">
+    <img alt="Play Store" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Ddev.sonel.valdi%26l%3DAndroid%26m%3D%24version&logo=google-play">
   <br />
 
 ![Screenshot](assets/main.png)
 
 ## About The Project
 
-"Who Am I Up Against?" (WAIUA) is simple Windows app that lets you see the ranks, recent game stats and other info of players in a live Valorant match while you're still playing it. Below are the current features that are in the app.
+A simple cross-platform web and mobile app to view your Valorant store. Created by Soneliem.
+
+Name derived after my favourite grocery store that overworks and understaffs its workers.
 
 ### Current Features
 
-|View Store|View Bundle|Fun* Reveal Mechanic|
+|View Store|View Bundle|Fun Reveal Mechanic*|Mobile App|
 |:---:|:---:|:---:|:---:|
-|![rank](assets/store.png)|![rank](assets/bundle.png)|![rank](assets/reveal/.png)|
+|![store](assets/main.png)|![bundle](assets/bundle.png)|![reveal](assets/reveal.png)|![app](assets/mobile.png)|
+
+#### Other features
+
+- [x] MFA Support
+- [x] Published to Play Store
+
+#### Planned Features
+
+- [ ] Night Market
+- [ ] Multi Account Support
+
+*Fun is subjective
 
 ## FAQ
 
-### Are my credentials stored anywhere?
+### Are my credentials stored on servers?
 
-Yes, just your access tokens which are stored on your own device
+No, but your access tokens are stored on your own device's browser
 
 ## Tech Stack
 
-**Client:** Ionic + Vite + Vue + Typescript +
+**Client:** Ionic + Vite + Vue + Typescript >
 Deployed on web with [Vercel](https://vercel.com)
 
-**Server:** Node + Express + Deployed on [Qoddi](https://qoddi.com/)
+**Server:** NodeJS + Express > Deployed on [Qoddi](https://qoddi.com/)
 
-## License
+Thank you to [Qoddi](https://qoddi.com/) for providing free hosting this project
 
-[MIT](https://choosealicense.com/licenses/mit/)
+## Why?
+
+Making a store checker is a rite of passage for any Valorant App Dev. I am simply following the tradition. I also wanted to learn more about Ionic and the Android app deployment, so this was a good opportunity to do so.
 
 ## Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://link-to-project
-  cd my-project
+  git clone https://github.com/Soneliem/vALDI.git
 ```
 
 Install dependencies
@@ -74,7 +90,6 @@ This repo is a Yarn workspace (monorepo), so you can also run the server and cli
   yarn run frontend
 ```
 
-
 ## Contributing
 
 Contributions are always welcome! Please use the `development` branch for PRs
@@ -92,5 +107,6 @@ Contributions are always welcome! Please use the `development` branch for PRs
 - [valorant.ts](https://github.com/KTNG-3/valorant-api) for the API wrapper
 
 ## DISCLAIMER
+
 THIS PROJECT IS NOT ASSOCIATED OR ENDORSED BY RIOT GAMES. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
 By using this application, you agree that you, the individual, are knowingly accessing all information required to be displayed.

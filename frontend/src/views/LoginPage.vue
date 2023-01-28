@@ -202,7 +202,7 @@ async function login() {
   await accountStore.signInUser(form.username, form.password, form.region);
   await hideLoading();
   if (accountStore.accountStatus === accountStatus.loggedIn) {
-    ionRouter.replace("/tabs/store");
+    ionRouter.replace("/store");
   } else if (accountStore.accountStatus === accountStatus.needsMFA) {
     mfaOpen.value = true;
   } else {
@@ -216,7 +216,7 @@ async function submitMFA() {
   await hideLoading();
   if (accountStore.accountStatus === accountStatus.loggedIn) {
     mfaOpen.value = false;
-    ionRouter.replace("/tabs/store");
+    ionRouter.replace("/store");
   } else if (accountStore.accountStatus === accountStatus.needsMFA) {
     mfaOpen.value = true;
   } else {
@@ -228,6 +228,7 @@ async function submitMFA() {
 <style scoped>
 .grid {
   min-height: 100vh;
+  padding: 0;
 }
 .card {
   min-width: 350px;

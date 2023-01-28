@@ -42,7 +42,7 @@ async function logout() {
   isLoading.value.present();
   await accountStore.signoutUser();
   isLoading.value.dismiss();
-  ionRouter.replace("/tabs/login");
+  ionRouter.replace("/login");
 }
 </script>
 

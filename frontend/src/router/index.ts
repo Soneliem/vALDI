@@ -8,7 +8,7 @@ const authCheck: NavigationGuard = async function (to, from, next) {
     if (await useAccountStore().tryReauth()) {
       next();
     } else {
-      next({ path: "/tabs/login" });
+      next({ path: "/login" });
     }
   } else {
     next();
@@ -17,15 +17,11 @@ const authCheck: NavigationGuard = async function (to, from, next) {
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/tabs/store",
-  },
-  {
-    path: "/tabs/",
     component: TabsPage,
     children: [
       {
         path: "",
-        redirect: "/tabs/store",
+        redirect: "/store",
       },
       {
         path: "account",
