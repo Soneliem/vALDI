@@ -20,6 +20,7 @@ var allowlist = [
   "http://valdi-staging.sonel.dev",
   "valdi-soneliem.vercel.app",
 ];
+
 const options: cors.CorsOptions = {
   origin: allowlist,
   optionsSuccessStatus: 200,
@@ -28,6 +29,13 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 app.use(express.json());
 app.options("*", cors(options));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowlist.includes(origin!)) {
+    res.setHeader("Access-Control-Allow-Origin", origin!);
+  }
+  return next();
+});
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
@@ -91,7 +99,7 @@ app.post("/wishlist", async function (req, res, next) {
       }
     }
   } else {
-    return res.status(400).json("API Client and skinID is required.");
+    return res.status(400).json("API Client, skinID and token are required.");
   }
 });
 
