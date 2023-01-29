@@ -29,14 +29,6 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 app.use(express.json());
 app.options("*", cors(options));
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowlist.includes(origin!)) {
-    res.setHeader("Access-Control-Allow-Origin", origin!);
-  }
-  console.log(origin);
-  return next();
-});
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
