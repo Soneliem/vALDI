@@ -113,5 +113,23 @@ export const useAccountStore = defineStore("accountStore", {
       }
       return { bundles: [], skins: [], remainingTime: 0 };
     },
+    async addWishlistItem(item: string, token: string): Promise<boolean> {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/wishlist",
+          {
+            APIClient: await store.get("APIClient"),
+            skinId: item,
+            token: token,
+          }
+        );
+        if (res.status == 200) {
+          return true;
+        }
+      } catch (error) {
+        console.error("Error adding wishlist item", error);
+      }
+      return false;
+    },
   },
 });

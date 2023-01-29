@@ -25,11 +25,10 @@
           <img
             class="image"
             slot="start"
-            alt="Icon"
             :src="(item.item.displayIcon as string | undefined)"
           />
           <ion-label>{{ item.item.displayName }}</ion-label>
-          <ion-button slot="end">
+          <ion-button slot="end" @click="addSkins(item.item.uuid)">
             +
             <!-- <ion-icon :name="addCircleOutline" slot="icon-only"></ion-icon> -->
           </ion-button>
@@ -54,11 +53,13 @@ import {
 } from "@ionic/vue";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { useFuse } from "@vueuse/integrations/useFuse";
-import { IonToggleCustomEvent, ToggleChangeEventDetail } from "@ionic/core";
 import { onMounted, Ref, ref } from "vue";
+import { useAccountStore } from "@/store/account";
 import { Skin } from "@/models/index";
 // import { addCircleOutline } from "ionicons/icons";
 import axios from "axios";
+
+const accountStore = useAccountStore();
 
 const data: Ref<Skin[]> = ref([]);
 const input: Ref<string> = ref("");
@@ -78,53 +79,19 @@ onMounted(async () => {
   }
 });
 
-async function addListeners() {
+async function addSkins(id: string) {
+  let permStatus = await PushNotifications.checkPermissions();
+  if (permStatus.receive === "prompt") {
+    permStatus = await PushNotifications.requestPermissions();
+  }
+  if (permStatus.receive !== "granted") {
+    throw new Error("User denied permissions!");
+  }
+  await PushNotifications.register();
   await PushNotifications.addListener("registration", (token) => {
     console.info("Registration token: ", token.value);
+    accountStore.addWishlistItem(id, token.value);
   });
-
-  await PushNotifications.addListener("registrationError", (err) => {
-    console.error("Registration error: ", err.error);
-  });
-
-  await PushNotifications.addListener(
-    "pushNotificationReceived",
-    (notification) => {
-      console.log("Push notification received: ", notification);
-    }
-  );
-
-  await PushNotifications.addListener(
-    "pushNotificationActionPerformed",
-    (notification) => {
-      console.log(
-        "Push notification action performed",
-        notification.actionId,
-        notification.inputValue
-      );
-    }
-  );
-}
-
-async function requestPermissions(
-  e: IonToggleCustomEvent<ToggleChangeEventDetail<any>>
-) {
-  if (e.detail.checked) {
-    let permStatus = await PushNotifications.checkPermissions();
-
-    if (permStatus.receive === "prompt") {
-      permStatus = await PushNotifications.requestPermissions();
-    }
-
-    if (permStatus.receive !== "granted") {
-      throw new Error("User denied permissions!");
-    }
-  }
-}
-
-async function registerNotifications() {
-  await PushNotifications.register();
-  await addListeners();
 }
 </script>
 

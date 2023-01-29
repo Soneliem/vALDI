@@ -4,7 +4,6 @@ import express from "express";
 import cors from "cors";
 import { Bundle, Skin, Store } from "./models";
 import { PrismaClient, Prisma } from "@prisma/client";
-import e from "express";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -53,7 +52,7 @@ app.post("/mfa", async function (req, res, next) {
 });
 
 app.post("/wishlist", async function (req, res, next) {
-  if (req.body?.APIClient && req.body?.skinId) {
+  if (req.body?.APIClient && req.body?.skinId && req.body?.token) {
     const apiClient = client.fromJSON(req.body?.APIClient);
     const dbUser = await prisma.user.findUnique({
       where: {
@@ -66,18 +65,25 @@ app.post("/wishlist", async function (req, res, next) {
           id: apiClient.getSubject(),
           client: JSON.parse(JSON.stringify(apiClient.toJSON())),
           skins: [req.body?.skinId as string],
+          tokens: [req.body?.token as string],
         },
       });
     } else {
       const skins = dbUser.skins;
       if (!skins.includes(req.body?.skinId as string)) {
         skins.push(req.body?.skinId as string);
+        const tokens = dbUser.tokens;
+        if (!tokens.includes(req.body?.token as string)) {
+          tokens.push(req.body?.token as string);
+        }
+
         await prisma.user.update({
           where: {
             id: apiClient.getSubject(),
           },
           data: {
             skins: skins,
+            tokens: tokens,
           },
         });
       }
