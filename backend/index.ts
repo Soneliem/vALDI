@@ -3,7 +3,7 @@ import ValAPI from "@valapi/valorant-api.com";
 import express from "express";
 import cors from "cors";
 import { Bundle, Skin, Store } from "./models";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -16,6 +16,8 @@ var allowlist = [
   "http://localhost:8100",
   "https://valdi.sonel.dev",
   "http://valdi.sonel.dev",
+  "https://valdi-staging.sonel.dev",
+  "http://valdi-staging.sonel.dev",
   "valdi-soneliem.vercel.app",
 ];
 const options: cors.CorsOptions = {
