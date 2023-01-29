@@ -34,6 +34,7 @@ app.use((req, res, next) => {
   if (allowlist.includes(origin!)) {
     res.setHeader("Access-Control-Allow-Origin", origin!);
   }
+  console.log(origin);
   return next();
 });
 
