@@ -6,6 +6,7 @@ export const User = sequelize.define("User", {
   id: {
     type: DataTypes.STRING,
     allowNull: false,
+    primaryKey: true,
   },
   client: {
     type: DataTypes.JSON,
@@ -22,3 +23,5 @@ export const User = sequelize.define("User", {
     defaultValue: [],
   },
 });
+
+User.sync();

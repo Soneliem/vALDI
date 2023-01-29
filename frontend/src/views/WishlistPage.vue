@@ -80,6 +80,7 @@ onMounted(async () => {
 });
 
 async function addSkins(id: string) {
+  // accountStore.addWishlistItem(id, "sdasdasda");
   let permStatus = await PushNotifications.checkPermissions();
   if (permStatus.receive === "prompt") {
     permStatus = await PushNotifications.requestPermissions();

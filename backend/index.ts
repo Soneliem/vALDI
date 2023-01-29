@@ -57,6 +57,7 @@ app.post("/mfa", async function (req, res, next) {
 app.post("/wishlist", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.skinId && req.body?.token) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    const userId = apiClient.getSubject();
     const dbUser = await User.findOne({
       where: {
         id: apiClient.getSubject(),
@@ -64,12 +65,10 @@ app.post("/wishlist", async function (req, res, next) {
     });
     if (!dbUser) {
       await User.create({
-        data: {
-          id: apiClient.getSubject(),
-          client: JSON.parse(JSON.stringify(apiClient.toJSON())),
-          skins: [req.body?.skinId as string],
-          tokens: [req.body?.token as string],
-        },
+        id: userId,
+        client: apiClient.toJSON(),
+        skins: [req.body?.skinId as string],
+        tokens: [req.body?.token as string],
       });
     } else {
       const skins = dbUser.skins;
@@ -84,10 +83,11 @@ app.post("/wishlist", async function (req, res, next) {
           {
             skins: skins,
             tokens: tokens,
+            client: apiClient.toJSON(),
           },
           {
             where: {
-              id: apiClient.getSubject(),
+              id: userId,
             },
           }
         );
