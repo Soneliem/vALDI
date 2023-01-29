@@ -1,11 +1,11 @@
+require("dotenv").config();
 import client from "@valapi/web-client";
 import ValAPI from "@valapi/valorant-api.com";
 import express from "express";
 import cors from "cors";
 import { Bundle, Skin, Store } from "./models";
-import { PrismaClient } from "@prisma/client";
+import { User } from "./db";
 
-const prisma = new PrismaClient();
 const app = express();
 
 var allowlist = [
@@ -57,13 +57,13 @@ app.post("/mfa", async function (req, res, next) {
 app.post("/wishlist", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.skinId && req.body?.token) {
     const apiClient = client.fromJSON(req.body?.APIClient);
-    const dbUser = await prisma.user.findUnique({
+    const dbUser = await User.findOne({
       where: {
         id: apiClient.getSubject(),
       },
     });
     if (!dbUser) {
-      await prisma.user.create({
+      await User.create({
         data: {
           id: apiClient.getSubject(),
           client: JSON.parse(JSON.stringify(apiClient.toJSON())),
@@ -80,15 +80,17 @@ app.post("/wishlist", async function (req, res, next) {
           tokens.push(req.body?.token as string);
         }
 
-        await prisma.user.update({
-          where: {
-            id: apiClient.getSubject(),
-          },
-          data: {
+        await User.update(
+          {
             skins: skins,
             tokens: tokens,
           },
-        });
+          {
+            where: {
+              id: apiClient.getSubject(),
+            },
+          }
+        );
       }
     }
   } else {
