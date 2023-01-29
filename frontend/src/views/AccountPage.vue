@@ -10,10 +10,6 @@
             Sign Out
             <ion-icon slot="end" :icon="logIn"></ion-icon>
           </ion-button>
-          <ion-button type="submit" @click="registerNotifications()">
-            Allow Push Notifications
-            <ion-icon slot="end" :icon="logIn"></ion-icon>
-          </ion-button>
         </ion-card-content>
       </ion-card>
     </ion-content>
