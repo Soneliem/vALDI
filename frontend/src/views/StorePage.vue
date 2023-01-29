@@ -77,7 +77,6 @@ import {
   IonIcon,
   IonLabel,
   IonProgressBar,
-  useIonRouter,
 } from "@ionic/vue";
 import { timeOutline, albumsOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
@@ -103,8 +102,8 @@ onMounted(async () => {
   store.value = await accountStore.getStore();
   if (store.value.skins.length == 0) {
     await accountStore.markSignedOut();
-    await accountStore.tryReauth();
-    window.location.reload();
+    if (await accountStore.tryReauth())
+      store.value = await accountStore.getStore();
   }
   isLoading.value = false;
 });

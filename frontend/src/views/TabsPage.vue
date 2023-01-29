@@ -10,6 +10,10 @@
           <ion-icon :icon="basketOutline" />
           <ion-label>Store</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="wishlist" href="/wishlist">
+          <ion-icon :icon="bookmarkOutline" />
+          <ion-label>Whishlist</ion-label>
+        </ion-tab-button>
 
         <ion-tab-button tab="account" href="/account">
           <ion-icon :icon="personOutline" />
@@ -30,5 +34,5 @@ import {
   IonPage,
   IonRouterOutlet,
 } from "@ionic/vue";
-import { basketOutline, personOutline } from "ionicons/icons";
+import { basketOutline, personOutline, bookmarkOutline } from "ionicons/icons";
 </script>
