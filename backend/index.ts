@@ -1,9 +1,10 @@
 require("dotenv").config();
 import client from "@valapi/web-client";
 import ValAPI from "@valapi/valorant-api.com";
+import { Weapons } from "@valapi/valorant-api.com/dist/service/Weapons";
 import express from "express";
 import cors from "cors";
-import { Bundle, Skin, Store, dbUser } from "./models";
+import { Bundle, Skin, Store, dbUser, StoreOffer } from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
 var admin = require("firebase-admin");
@@ -70,12 +71,12 @@ app.post("/settings/get", async function (req, res, next) {
     }
     const [offers, apiSkins] = await Promise.all([
       apiClient.Store.getOffers(),
-      valAPI.Weapons.getSkins(),
+      getAllSkins(valAPI),
     ]);
     const skins = await skinIdsToSkins(
       dbUser.skins,
       offers.data.Offers,
-      apiSkins.data.data
+      apiSkins
     );
     dbUser.skins = skins;
     return res.send(dbUser);
@@ -98,17 +99,22 @@ app.post("/wishlist", async function (req, res, next) {
     }
     const [offers, apiSkins] = await Promise.all([
       apiClient.Store.getOffers(),
-      valAPI.Weapons.getSkins(),
+      getAllSkins(valAPI),
     ]);
     const skins = await skinIdsToSkins(
       dbUser.skins,
       offers.data.Offers,
-      apiSkins.data.data
+      apiSkins
     );
     return res.send(skins);
   } else {
     return res.status(400).json("API Client is required.");
   }
+});
+
+app.get("/skins", async function (req, res, next) {
+  const valAPI = new ValAPI({});
+  return res.send(await getAllSkins(valAPI));
 });
 
 app.post("/wishlist/add", async function (req, res, next) {
@@ -153,12 +159,12 @@ app.post("/wishlist/add", async function (req, res, next) {
       }
       const [offers, apiSkins] = await Promise.all([
         apiClient.Store.getOffers(),
-        valAPI.Weapons.getSkins(),
+        getAllSkins(valAPI),
       ]);
       const cSkins = await skinIdsToSkins(
         dbUser.skins,
         offers.data.Offers,
-        apiSkins.data.data
+        apiSkins
       );
       return res.send(cSkins);
     }
@@ -206,12 +212,12 @@ app.post("/wishlist/remove", async function (req, res, next) {
       }
       const [offers, apiSkins] = await Promise.all([
         apiClient.Store.getOffers(),
-        valAPI.Weapons.getSkins(),
+        getAllSkins(valAPI),
       ]);
       const cSkins = await skinIdsToSkins(
         dbUser.skins,
         offers.data.Offers,
-        apiSkins.data.data
+        apiSkins
       );
       return res.send(cSkins);
     } else {
@@ -303,20 +309,18 @@ app.post("/store", async function (req, res, next) {
     const apiClient = client.fromJSON(req.body?.APIClient);
     const valAPI = new ValAPI({});
     // Get store, offers and skin info
-    const [rawStore, offers, apiSkins, apiBundles] = await Promise.all([
+    const [rawStore, apiSkins, apiBundles] = await Promise.all([
       apiClient.Store.getStorefront(apiClient.getSubject()),
-      apiClient.Store.getOffers(),
-      valAPI.Weapons.getSkinLevels(),
+      getAllSkins(valAPI),
       valAPI.Bundles.get(),
     ]);
 
-    if (!rawStore?.data?.SkinsPanelLayout?.SingleItemOffers)
+    if (!rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers)
       return res.status(400).json("Store is not available.");
 
-    const skins = await skinIdsToSkins(
-      rawStore.data.SkinsPanelLayout.SingleItemOffers,
-      offers.data.Offers,
-      apiSkins.data.data
+    const skins = await storeToSkins(
+      rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers,
+      apiSkins
     );
 
     const bundles: Bundle[] = await Promise.all(
@@ -368,25 +372,71 @@ async function checkAndNotifyStore() {
   User.findAll().then(async (users: dbUser[]) => {
     await Promise.all(
       users.map(async (user: dbUser) => {
-        if (!user.notify) return;
         const apiClient = client.fromJSON(user.client);
-        await apiClient.refresh();
         const valAPI = new ValAPI({});
-        const [rawStore, offers, apiSkins] = await Promise.all([
+        const [rawStore, apiSkins] = await Promise.all([
           apiClient.Store.getStorefront(apiClient.getSubject()),
-          apiClient.Store.getOffers(),
-          valAPI.Weapons.getSkinLevels(),
+          getAllSkins(valAPI),
         ]);
 
-        if (!rawStore?.data?.SkinsPanelLayout?.SingleItemOffers) return;
+        if (!rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers) return;
 
-        const skins = await skinIdsToSkins(
-          rawStore.data.SkinsPanelLayout.SingleItemOffers,
-          offers.data.Offers,
-          apiSkins.data.data
-        );
+        // check if wishlist item exists in store
 
-        if (skins.length > 0) {
+        const foundSkins: StoreOffer[] = [];
+        user.skins.forEach((skin) => {
+          const apiSkin =
+            rawStore.data.SkinsPanelLayout.SingleItemStoreOffers.find(
+              (s: StoreOffer) => s.OfferID == skin
+            );
+          if (apiSkin) foundSkins.push(apiSkin);
+        });
+
+        if (foundSkins.length > 0) {
+          const skins = await storeToSkins(foundSkins, apiSkins);
+
+          const newSkinsString = skins
+            .map((skin) => skin.name)
+            .join(", ")
+            .replace(/,(?!.*,)/gim, " and");
+
+          let message = `Your wishlisted skin, ${newSkinsString}, is your store!`;
+
+          if (skins.length > 1)
+            message = `Your wishlisted skins, ${newSkinsString}, are your store!`;
+
+          getMessaging()
+            .sendMulticast({
+              notification: {
+                title: "VALDI: RIP Your Wallet",
+                body: message,
+              },
+              tokens: user.tokens,
+              android: {
+                notification: {
+                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+                },
+              },
+              webpush: {
+                notification: {
+                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+                },
+                fcmOptions: {
+                  link: "https://valdi.sonel.dev/store",
+                },
+              },
+            })
+            .catch((error) => {
+              console.error("Error sending message:", error);
+            });
+        }
+
+        if (user.notify) {
+          const skins = await storeToSkins(
+            rawStore.data.SkinsPanelLayout.SingleItemStoreOffers,
+            apiSkins
+          );
+
           const newSkinsString = skins
             .map((skin) => skin.name)
             .join(", ")
@@ -423,7 +473,7 @@ async function checkAndNotifyStore() {
   });
 }
 
-async function skinIdsToSkins(skins: string[], offers: any, apiSkins: any) {
+async function skinIdsToSkins(skins: string[], offers: any[], apiSkins: any) {
   return await Promise.all(
     skins.map(async (rawSkin: string) => {
       // Get the skin info from ValAPI
@@ -444,6 +494,38 @@ async function skinIdsToSkins(skins: string[], offers: any, apiSkins: any) {
       };
     })
   );
+}
+
+async function storeToSkins(
+  store: StoreOffer[],
+  apiSkins: Weapons.WeaponSkinLevels[]
+) {
+  return await Promise.all(
+    store.map(async (rawSkin: StoreOffer) => {
+      // Get the skin info from ValAPI
+      const skinData = apiSkins.find(
+        (skin: any) => skin.uuid === rawSkin.OfferID
+      );
+      return <Skin>{
+        uuid: rawSkin.OfferID,
+        name: skinData?.displayName,
+        image: skinData?.displayIcon,
+        price: rawSkin.Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+      };
+    })
+  );
+}
+
+async function getAllSkins(valAPI: ValAPI) {
+  const lowestLevelSkins: Weapons.WeaponSkinLevels[] = [];
+  const res = await valAPI.Weapons.getSkins();
+  if (res.data?.data)
+    await Promise.all(
+      res.data.data.map(async (skin) => {
+        lowestLevelSkins.push(skin.levels[0]);
+      })
+    );
+  return lowestLevelSkins;
 }
 
 schedule.scheduleJob("1 0 * * *", async () => {

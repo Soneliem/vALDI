@@ -125,6 +125,7 @@ onMounted(async () => {
       store.value = await accountStore.getStore();
   }
   isLoading.value = false;
+  await accountStore.updateSettings();
 });
 
 function segmentChanged(ev: CustomEvent) {

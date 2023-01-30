@@ -35,9 +35,4 @@ import {
   IonRouterOutlet,
 } from "@ionic/vue";
 import { basketOutline, personOutline, bookmarkOutline } from "ionicons/icons";
-
-import { useAccountStore } from "@/store/account";
-
-const accountStore = useAccountStore();
-accountStore.updateSettings();
 </script>

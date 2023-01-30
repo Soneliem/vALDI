@@ -119,14 +119,7 @@ const { results } = useFuse(input, data, {
 });
 
 onMounted(async () => {
-  try {
-    const res = await axios.get("https://valorant-api.com/v1/weapons/skins");
-    if (res.status == 200) {
-      data.value = res.data.data;
-    }
-  } catch (error) {
-    console.error("Error getting skins", error);
-  }
+  data.value = await accountStore.getSkins();
 });
 
 async function addSkins(id: string) {

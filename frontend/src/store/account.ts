@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { accountStatus, Store, StoreSkin } from "@/models";
+import { accountStatus, Store, StoreSkin, Skin } from "@/models";
 
 import { Storage } from "@ionic/storage";
 const store = new Storage();
@@ -100,6 +100,19 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async markSignedOut() {
       this.accountStatus = accountStatus.notLoggedIn;
+    },
+    async getSkins(): Promise<Skin[]> {
+      try {
+        const res = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/skins"
+        );
+        if (res.status == 200) {
+          return res.data;
+        }
+      } catch (error) {
+        console.error("Error getting skins", error);
+      }
+      return [];
     },
     async getStore(): Promise<Store> {
       try {
