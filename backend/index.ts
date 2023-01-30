@@ -3,8 +3,11 @@ import client from "@valapi/web-client";
 import ValAPI from "@valapi/valorant-api.com";
 import express from "express";
 import cors from "cors";
-import { Bundle, Skin, Store } from "./models";
+import { Bundle, Skin, Store, dbUser } from "./models";
 import { User } from "./db";
+import schedule from "node-schedule";
+var admin = require("firebase-admin");
+import { getMessaging } from "firebase-admin/messaging";
 
 const app = express();
 
@@ -263,7 +266,72 @@ const server = app.listen(8080, function () {
   console.log("Web server listening on port", 8080);
 });
 
-// server.setTimeout(10000);
+server.setTimeout(10000);
+
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(process.env.FIREBASE_JSON as string)
+  ),
+});
+
+async function checkAndNotifyStore() {
+  User.findAll().then(async (users: dbUser[]) => {
+    await Promise.all(
+      users.map(async (user: dbUser) => {
+        if (!user.notify) return;
+        const apiClient = client.fromJSON(user.client);
+        await apiClient.refresh();
+        const valAPI = new ValAPI({});
+        const [rawStore, offers, apiSkins] = await Promise.all([
+          apiClient.Store.getStorefront(apiClient.getSubject()),
+          apiClient.Store.getOffers(),
+          valAPI.Weapons.getSkinLevels(),
+        ]);
+
+        if (!rawStore?.data?.SkinsPanelLayout?.SingleItemOffers) return;
+
+        const skins = await skinIdsToSkins(
+          rawStore.data.SkinsPanelLayout.SingleItemOffers,
+          offers.data.Offers,
+          apiSkins.data.data
+        );
+
+        if (skins.length > 0) {
+          const newSkinsString = skins
+            .map((skin) => skin.name)
+            .join(", ")
+            .replace(/,(?!.*,)/gim, " and");
+
+          getMessaging()
+            .sendMulticast({
+              notification: {
+                title: "VALDI: Daily Store",
+                body: `The following skins are now available in your store: ${newSkinsString}!`,
+              },
+              tokens: user.tokens,
+              android: {
+                notification: {
+                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+                },
+              },
+
+              webpush: {
+                notification: {
+                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+                },
+                fcmOptions: {
+                  link: "https://valdi.sonel.dev/store",
+                },
+              },
+            })
+            .catch((error) => {
+              console.error("Error sending message:", error);
+            });
+        }
+      })
+    );
+  });
+}
 
 async function skinIdsToSkins(skins: string[], offers: any, apiSkins: any) {
   return await Promise.all(
@@ -287,3 +355,11 @@ async function skinIdsToSkins(skins: string[], offers: any, apiSkins: any) {
     })
   );
 }
+
+schedule.scheduleJob("1 0 * * *", async () => {
+  await checkAndNotifyStore();
+});
+
+process.on("uncaughtException", function (err) {
+  console.error(err);
+});

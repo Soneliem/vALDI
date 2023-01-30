@@ -22,6 +22,11 @@ export const User = sequelize.define("User", {
     allowNull: false,
     defaultValue: [],
   },
+  notify: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 });
 
 User.sync();

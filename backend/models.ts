@@ -17,3 +17,11 @@ export interface Skin {
   image: string;
   price: number;
 }
+
+export interface dbUser {
+  id: string;
+  client: any;
+  skins: string[];
+  tokens: string[];
+  notify: boolean;
+}

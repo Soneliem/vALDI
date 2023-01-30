@@ -9,9 +9,12 @@
     "dev": "nodemon index.ts"
   },
   "dependencies": {
+    "@types/node-schedule": "^2.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase-admin": "^11.5.0",
+    "node-schedule": "^2.1.1",
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.28.0",
