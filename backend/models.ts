@@ -12,6 +12,7 @@ export interface Bundle {
 }
 
 export interface Skin {
+  uuid: string;
   name: string;
   image: string;
   price: number;

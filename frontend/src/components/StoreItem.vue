@@ -42,6 +42,7 @@
         ></ion-card-subtitle
       >
     </ion-card-header>
+    <ion-button @click="$emit('remove')" fill="clear">Remove</ion-button>
   </ion-card>
 </template>
 
@@ -53,17 +54,24 @@ import {
   IonCardTitle,
   IonCardContent,
   IonSkeletonText,
+  IonButton,
 } from "@ionic/vue";
-import { defineProps, ref } from "vue";
+import { defineProps, ref, defineEmits } from "vue";
 
-defineProps<{
+const props = defineProps<{
   name?: string;
   image?: string;
   price?: number;
   loading?: boolean;
+  show?: boolean;
 }>();
 
+defineEmits(["remove"]);
+
 const show = ref(false);
+if (props.show) {
+  show.value = true;
+}
 </script>
 
 <style scoped>

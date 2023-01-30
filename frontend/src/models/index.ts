@@ -6,7 +6,7 @@ export enum accountStatus {
 
 export interface Store {
   bundles: Bundle[];
-  skins: Skin[];
+  skins: StoreSkin[];
   remainingTime: number;
 }
 
@@ -17,7 +17,8 @@ export interface Bundle {
   remainingTime: number;
 }
 
-export interface Skin {
+export interface StoreSkin {
+  uuid: string;
   name: string;
   image: string;
   price: number;

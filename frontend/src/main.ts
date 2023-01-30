@@ -23,11 +23,16 @@ import "@ionic/vue/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import messaging from "./firebase";
+
 // await SplashScreen.show({
 //   autoHide: false,
 // });
 const pinia = createPinia();
 const app = createApp(App).use(IonicVue).use(router).use(pinia);
+
+app.provide("messaging", messaging);
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.isReady().then(() => {
   app.mount("#app");

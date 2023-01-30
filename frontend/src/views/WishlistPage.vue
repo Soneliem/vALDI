@@ -28,12 +28,39 @@
             :src="(item.item.displayIcon as string | undefined)"
           />
           <ion-label>{{ item.item.displayName }}</ion-label>
-          <ion-button slot="end" @click="addSkins(item.item.uuid)">
+          <ion-button
+            slot="end"
+            @click="addSkins(item.item.uuid)"
+            v-if="!wishlist.some((e) => e.name === item.item.displayName)"
+          >
             +
             <!-- <ion-icon :name="addCircleOutline" slot="icon-only"></ion-icon> -->
           </ion-button>
+          <ion-button
+            color="danger"
+            slot="end"
+            @click="removeSkins(item.item.uuid)"
+            v-if="wishlist.some((e) => e.name === item.item.displayName)"
+          >
+            -
+            <!-- <ion-icon :name="removeCircleOutline" slot="icon-only"></ion-icon> -->
+          </ion-button>
         </ion-item>
       </ion-list>
+      <ion-grid>
+        <ion-row>
+          <ion-col v-for="skin in wishlist" v-bind:key="skin.uuid">
+            <StoreItem
+              :loading="false"
+              :name="skin.name"
+              :image="skin.image"
+              :price="skin.price"
+              :show="true"
+              @remove="removeSkins(skin.uuid)"
+            ></StoreItem>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
@@ -49,20 +76,34 @@ import {
   IonSearchbar,
   IonItem,
   IonLabel,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
   // IonIcon,
 } from "@ionic/vue";
+import StoreItem from "@/components/StoreItem.vue";
 import { PushNotifications } from "@capacitor/push-notifications";
+import { isPlatform } from "@ionic/vue";
 import { useFuse } from "@vueuse/integrations/useFuse";
 import { onMounted, Ref, ref } from "vue";
 import { useAccountStore } from "@/store/account";
-import { Skin } from "@/models/index";
+import { Skin, StoreSkin } from "@/models/index";
 // import { addCircleOutline } from "ionicons/icons";
+// import { removeCircleOutline } from "ionicons/icons";
 import axios from "axios";
+import { inject } from "vue";
+import { getToken, Messaging } from "firebase/messaging";
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const messaging: Messaging = inject("messaging")!;
 
 const accountStore = useAccountStore();
 
 const data: Ref<Skin[]> = ref([]);
 const input: Ref<string> = ref("");
+const wishlist: Ref<StoreSkin[]> = ref([]);
+
 const { results } = useFuse(input, data, {
   fuseOptions: { keys: ["displayName"] },
   resultLimit: 5,
@@ -77,22 +118,47 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error getting skins", error);
   }
+
+  wishlist.value = await accountStore.getWishlist();
 });
 
 async function addSkins(id: string) {
-  // accountStore.addWishlistItem(id, "sdasdasda");
-  let permStatus = await PushNotifications.checkPermissions();
-  if (permStatus.receive === "prompt") {
-    permStatus = await PushNotifications.requestPermissions();
+  if (isPlatform("desktop") || isPlatform("mobileweb")) {
+    getToken(messaging, {
+      vapidKey:
+        "BEE2j59DvCw1hYAQMU_Idnyc83s4duwu-bQ4FE1bAUd_7r893SQGpxB96TgyicBukjtUOCs_w4nENjpNhC1aH0o",
+    })
+      .then(async (currentToken) => {
+        if (currentToken) {
+          wishlist.value = await accountStore.addWishlistItem(id, currentToken);
+        } else {
+          console.log(
+            "No registration token available. Request permission to generate one."
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("An error occurred while retrieving token. ", err);
+      });
+  } else {
+    let permStatus = await PushNotifications.checkPermissions();
+    if (permStatus.receive === "prompt") {
+      permStatus = await PushNotifications.requestPermissions();
+    }
+    if (permStatus.receive !== "granted") {
+      throw new Error("User denied permissions!");
+    }
+    await PushNotifications.register();
+    await PushNotifications.addListener("registration", async (token) => {
+      console.info("Registration token: ", token.value);
+      await accountStore.addWishlistItem(id, token.value);
+      wishlist.value = await accountStore.getWishlist();
+    });
   }
-  if (permStatus.receive !== "granted") {
-    throw new Error("User denied permissions!");
-  }
-  await PushNotifications.register();
-  await PushNotifications.addListener("registration", (token) => {
-    console.info("Registration token: ", token.value);
-    accountStore.addWishlistItem(id, token.value);
-  });
+}
+
+async function removeSkins(id: string) {
+  wishlist.value = await accountStore.removeWishlistItem(id);
 }
 </script>
 

@@ -25,7 +25,7 @@
           <ion-col
             size="auto"
             v-for="item in store.skins"
-            v-bind:key="item.name"
+            v-bind:key="item.uuid"
           >
             <StoreItem
               :loading="false"

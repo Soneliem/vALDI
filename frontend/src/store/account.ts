@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { accountStatus, Store } from "@/models";
+import { accountStatus, Skin, Store, StoreSkin } from "@/models";
 
 import { Storage } from "@ionic/storage";
 const store = new Storage();
@@ -113,10 +113,10 @@ export const useAccountStore = defineStore("accountStore", {
       }
       return { bundles: [], skins: [], remainingTime: 0 };
     },
-    async addWishlistItem(item: string, token: string): Promise<boolean> {
+    async addWishlistItem(item: string, token: string): Promise<StoreSkin[]> {
       try {
         const res = await axios.post(
-          import.meta.env.VITE_BACKEND_URL + "/wishlist",
+          import.meta.env.VITE_BACKEND_URL + "/wishlist/add",
           {
             APIClient: await store.get("APIClient"),
             skinId: item,
@@ -124,12 +124,45 @@ export const useAccountStore = defineStore("accountStore", {
           }
         );
         if (res.status == 200) {
-          return true;
+          return res.data;
         }
       } catch (error) {
         console.error("Error adding wishlist item", error);
       }
-      return false;
+      return [];
+    },
+    async removeWishlistItem(item: string): Promise<StoreSkin[]> {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/wishlist/remove",
+          {
+            APIClient: await store.get("APIClient"),
+            skinId: item,
+          }
+        );
+        if (res.status == 200) {
+          return res.data;
+        }
+      } catch (error) {
+        console.error("Error removing wishlist item", error);
+      }
+      return [];
+    },
+    async getWishlist(): Promise<StoreSkin[]> {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/wishlist",
+          {
+            APIClient: await store.get("APIClient"),
+          }
+        );
+        if (res.status == 200) {
+          return res.data;
+        }
+      } catch (error) {
+        console.error("Error getting wishlist", error);
+      }
+      return [];
     },
   },
 });
