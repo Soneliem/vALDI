@@ -31,7 +31,11 @@
           <ion-button
             slot="end"
             @click="addSkins(item.item.uuid)"
-            v-if="!wishlist.some((e) => e.name === item.item.displayName)"
+            v-if="
+              !accountStore.wishlist.some(
+                (e) => e.name === item.item.displayName
+              )
+            "
           >
             +
             <!-- <ion-icon :name="addCircleOutline" slot="icon-only"></ion-icon> -->
@@ -40,7 +44,11 @@
             color="danger"
             slot="end"
             @click="removeSkins(item.item.uuid)"
-            v-if="wishlist.some((e) => e.name === item.item.displayName)"
+            v-if="
+              accountStore.wishlist.some(
+                (e) => e.name === item.item.displayName
+              )
+            "
           >
             -
             <!-- <ion-icon :name="removeCircleOutline" slot="icon-only"></ion-icon> -->
@@ -49,13 +57,14 @@
       </ion-list>
       <ion-grid>
         <ion-row>
-          <ion-col v-for="skin in wishlist" v-bind:key="skin.uuid">
+          <ion-col v-for="skin in accountStore.wishlist" v-bind:key="skin.uuid">
             <StoreItem
               :loading="false"
               :name="skin.name"
               :image="skin.image"
               :price="skin.price"
               :show="true"
+              :removeButton="true"
               @remove="removeSkins(skin.uuid)"
             ></StoreItem>
           </ion-col>
@@ -88,7 +97,7 @@ import { isPlatform } from "@ionic/vue";
 import { useFuse } from "@vueuse/integrations/useFuse";
 import { onMounted, Ref, ref } from "vue";
 import { useAccountStore } from "@/store/account";
-import { Skin, StoreSkin } from "@/models/index";
+import { Skin } from "@/models/index";
 // import { addCircleOutline } from "ionicons/icons";
 // import { removeCircleOutline } from "ionicons/icons";
 import axios from "axios";
@@ -102,7 +111,7 @@ const accountStore = useAccountStore();
 
 const data: Ref<Skin[]> = ref([]);
 const input: Ref<string> = ref("");
-const wishlist: Ref<StoreSkin[]> = ref([]);
+// const wishlist: Ref<StoreSkin[]> = ref([]);
 
 const { results } = useFuse(input, data, {
   fuseOptions: { keys: ["displayName"] },
@@ -118,8 +127,6 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error getting skins", error);
   }
-
-  wishlist.value = await accountStore.getWishlist();
 });
 
 async function addSkins(id: string) {
@@ -130,7 +137,7 @@ async function addSkins(id: string) {
     })
       .then(async (currentToken) => {
         if (currentToken) {
-          wishlist.value = await accountStore.addWishlistItem(id, currentToken);
+          await accountStore.addWishlistItem(id, currentToken);
         } else {
           console.log(
             "No registration token available. Request permission to generate one."
@@ -152,13 +159,12 @@ async function addSkins(id: string) {
     await PushNotifications.addListener("registration", async (token) => {
       console.info("Registration token: ", token.value);
       await accountStore.addWishlistItem(id, token.value);
-      wishlist.value = await accountStore.getWishlist();
     });
   }
 }
 
 async function removeSkins(id: string) {
-  wishlist.value = await accountStore.removeWishlistItem(id);
+  await accountStore.removeWishlistItem(id);
 }
 </script>
 

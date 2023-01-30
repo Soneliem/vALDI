@@ -42,7 +42,9 @@
         ></ion-card-subtitle
       >
     </ion-card-header>
-    <ion-button @click="$emit('remove')" fill="clear">Remove</ion-button>
+    <ion-button v-if="removeButton" @click="$emit('remove')" fill="clear"
+      >Remove</ion-button
+    >
   </ion-card>
 </template>
 
@@ -64,6 +66,7 @@ const props = defineProps<{
   price?: number;
   loading?: boolean;
   show?: boolean;
+  removeButton?: boolean;
 }>();
 
 defineEmits(["remove"]);

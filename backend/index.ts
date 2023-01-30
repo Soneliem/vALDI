@@ -56,6 +56,34 @@ app.post("/mfa", async function (req, res, next) {
   }
 });
 
+app.post("/settings/get", async function (req, res, next) {
+  if (req.body?.APIClient) {
+    const apiClient = client.fromJSON(req.body.APIClient);
+    const valAPI = new ValAPI({});
+    const dbUser = await User.findOne({
+      where: {
+        id: apiClient.getSubject(),
+      },
+    });
+    if (!dbUser) {
+      return res.status(404).json("User not found.");
+    }
+    const [offers, apiSkins] = await Promise.all([
+      apiClient.Store.getOffers(),
+      valAPI.Weapons.getSkins(),
+    ]);
+    const skins = await skinIdsToSkins(
+      dbUser.skins,
+      offers.data.Offers,
+      apiSkins.data.data
+    );
+    dbUser.skins = skins;
+    return res.send(dbUser);
+  } else {
+    return res.status(400).json("API Client is required.");
+  }
+});
+
 app.post("/wishlist", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body.APIClient);

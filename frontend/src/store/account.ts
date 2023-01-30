@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { accountStatus, Skin, Store, StoreSkin } from "@/models";
+import { accountStatus, Store, StoreSkin } from "@/models";
 
 import { Storage } from "@ionic/storage";
 const store = new Storage();
 store.create();
 
 export const useAccountStore = defineStore("accountStore", {
-  state: () => ({ accountStatus: accountStatus.notLoggedIn }),
+  state: () => ({
+    accountStatus: accountStatus.notLoggedIn,
+    notificationEnabled: false,
+    wishlist: [] as StoreSkin[],
+  }),
   getters: {
     isLoggedIn: (state) => state.accountStatus == accountStatus.loggedIn,
   },
@@ -113,7 +117,7 @@ export const useAccountStore = defineStore("accountStore", {
       }
       return { bundles: [], skins: [], remainingTime: 0 };
     },
-    async addWishlistItem(item: string, token: string): Promise<StoreSkin[]> {
+    async addWishlistItem(item: string, token: string) {
       try {
         const res = await axios.post(
           import.meta.env.VITE_BACKEND_URL + "/wishlist/add",
@@ -124,14 +128,44 @@ export const useAccountStore = defineStore("accountStore", {
           }
         );
         if (res.status == 200) {
-          return res.data;
+          this.wishlist = res.data;
         }
       } catch (error) {
         console.error("Error adding wishlist item", error);
       }
-      return [];
     },
-    async removeWishlistItem(item: string): Promise<StoreSkin[]> {
+    async enableNotify(token: string) {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/notify/enable",
+          {
+            APIClient: await store.get("APIClient"),
+            token: token,
+          }
+        );
+        if (res.status == 200) {
+          this.notificationEnabled = true;
+        }
+      } catch (error) {
+        console.error("Error enabling notifications", error);
+      }
+    },
+    async disableNotify() {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/notify/disable",
+          {
+            APIClient: await store.get("APIClient"),
+          }
+        );
+        if (res.status == 200) {
+          this.notificationEnabled = false;
+        }
+      } catch (error) {
+        console.error("Error disabling notifications", error);
+      }
+    },
+    async removeWishlistItem(item: string) {
       try {
         const res = await axios.post(
           import.meta.env.VITE_BACKEND_URL + "/wishlist/remove",
@@ -141,14 +175,13 @@ export const useAccountStore = defineStore("accountStore", {
           }
         );
         if (res.status == 200) {
-          return res.data;
+          this.wishlist = res.data;
         }
       } catch (error) {
         console.error("Error removing wishlist item", error);
       }
-      return [];
     },
-    async getWishlist(): Promise<StoreSkin[]> {
+    async updateWishlist() {
       try {
         const res = await axios.post(
           import.meta.env.VITE_BACKEND_URL + "/wishlist",
@@ -157,10 +190,26 @@ export const useAccountStore = defineStore("accountStore", {
           }
         );
         if (res.status == 200) {
-          return res.data;
+          this.wishlist = res.data;
         }
       } catch (error) {
         console.error("Error getting wishlist", error);
+      }
+    },
+    async updateSettings() {
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_BACKEND_URL + "/settings/get",
+          {
+            APIClient: await store.get("APIClient"),
+          }
+        );
+        if (res.status == 200) {
+          this.notificationEnabled = res.data.notify;
+          this.wishlist = res.data.skins;
+        }
+      } catch (error) {
+        console.error("Error updating config", error);
       }
       return [];
     },
