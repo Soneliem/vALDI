@@ -208,6 +208,68 @@ app.post("/reauth", async function (req, res, next) {
   }
 });
 
+app.post("/notify/enable", async function (req, res, next) {
+  if (req.body?.APIClient && req.body?.token) {
+    const apiClient = client.fromJSON(req.body?.APIClient);
+    const userId = apiClient.getSubject();
+
+    const dbUser = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!dbUser) {
+      await User.create({
+        id: userId,
+        client: apiClient.toJSON(),
+        notify: true,
+        tokens: [req.body?.token as string],
+      });
+    } else {
+      const tokens = dbUser.tokens;
+      if (!dbUser.tokens.includes(req.body?.token as string)) {
+        tokens.push(req.body?.token as string);
+      }
+      await User.update(
+        {
+          tokens: tokens,
+          notify: true,
+          client: apiClient.toJSON(),
+        },
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
+    }
+    res.send();
+  } else {
+    res.status(400).json("API Client is required.");
+  }
+});
+
+app.post("/notify/disable", async function (req, res, next) {
+  if (req.body?.APIClient) {
+    const apiClient = client.fromJSON(req.body?.APIClient);
+    const userId = apiClient.getSubject();
+    await User.update(
+      {
+        notify: false,
+        client: apiClient.toJSON(),
+      },
+      {
+        where: {
+          id: userId,
+        },
+      }
+    );
+    res.send();
+  } else {
+    res.status(400).json("API Client is required.");
+  }
+});
+
 app.post("/store", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body?.APIClient);
@@ -361,5 +423,9 @@ schedule.scheduleJob("1 0 * * *", async () => {
 });
 
 process.on("uncaughtException", function (err) {
+  console.error(err);
+});
+
+process.on("unhandledRejection", function (err) {
   console.error(err);
 });
