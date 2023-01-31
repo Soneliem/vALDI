@@ -100,7 +100,6 @@ import { useAccountStore } from "@/store/account";
 import { Skin } from "@/models/index";
 // import { addCircleOutline } from "ionicons/icons";
 // import { removeCircleOutline } from "ionicons/icons";
-import axios from "axios";
 import { inject } from "vue";
 import { getToken, Messaging } from "firebase/messaging";
 

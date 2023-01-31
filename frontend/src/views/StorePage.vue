@@ -133,8 +133,9 @@ function segmentChanged(ev: CustomEvent) {
 }
 
 function toggleNotification(ev: CustomEvent) {
-  if (ev.detail.checked) enableNotify();
-  else accountStore.disableNotify();
+  if (ev.detail.checked && !accountStore.notificationEnabled) enableNotify();
+  else if (!ev.detail.checked && accountStore.notificationEnabled)
+    accountStore.disableNotify();
 }
 
 async function enableNotify() {

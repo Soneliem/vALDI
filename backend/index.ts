@@ -190,7 +190,7 @@ app.post("/wishlist/remove", async function (req, res, next) {
       if (index > -1) {
         skins.splice(index, 1);
 
-        if (skins.length === 0) {
+        if (skins.length == 0 && !dbUser.notify) {
           await User.destroy({
             where: {
               id: userId,
@@ -287,17 +287,31 @@ app.post("/notify/disable", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body?.APIClient);
     const userId = apiClient.getSubject();
-    await User.update(
-      {
-        notify: false,
-        client: apiClient.toJSON(),
+    const dbUser = await User.findOne({
+      where: {
+        id: userId,
       },
-      {
+    });
+    if (dbUser.skins.length) {
+      await User.update(
+        {
+          notify: false,
+          client: apiClient.toJSON(),
+        },
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
+    } else {
+      await User.destroy({
         where: {
           id: userId,
         },
-      }
-    );
+      });
+    }
+
     res.send();
   } else {
     res.status(400).json("API Client is required.");

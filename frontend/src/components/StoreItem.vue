@@ -1,5 +1,5 @@
 <template>
-  <ion-card v-if="loading" style="width: auto">
+  <ion-card v-if="loading" style="width: fit-content">
     <ion-card-content>
       <ion-skeleton-text
         :animated="true"
@@ -21,8 +21,8 @@
       </ion-card-subtitle>
     </ion-card-header>
   </ion-card>
-  <ion-card v-if="!loading" style="width: auto" @click="show = true">
-    <ion-card-content class="ion-padding" :class="{ rgb: show }">
+  <ion-card v-if="!loading" style="width: fit-content" @click="show = true">
+    <ion-card-content class="ion-padding card-content" :class="{ rgb: show }">
       <img class="image" :alt="name" :class="{ show: show }" :src="image" />
     </ion-card-content>
     <ion-card-header>
