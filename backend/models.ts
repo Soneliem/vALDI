@@ -42,3 +42,10 @@ export interface Reward {
   ItemID: string;
   Quantity: number;
 }
+
+export interface Account {
+  user: { username: string; level: number };
+  wallet: { vp: number; rp: number };
+  skins: Skin[];
+  notify: boolean;
+}

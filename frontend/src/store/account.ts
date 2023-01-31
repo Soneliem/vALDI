@@ -11,6 +11,11 @@ export const useAccountStore = defineStore("accountStore", {
     accountStatus: accountStatus.notLoggedIn,
     notificationEnabled: false,
     wishlist: [] as StoreSkin[],
+    wallet: { vp: 0, rp: 0 },
+    user: {
+      username: "",
+      level: 0,
+    },
   }),
   getters: {
     isLoggedIn: (state) => state.accountStatus == accountStatus.loggedIn,
@@ -29,6 +34,7 @@ export const useAccountStore = defineStore("accountStore", {
           if (res.status == 200) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.loggedIn;
+            await this.updateAccount();
             return true;
           } else {
             this.accountStatus = accountStatus.notLoggedIn;
@@ -52,6 +58,7 @@ export const useAccountStore = defineStore("accountStore", {
         if (res.status == 200) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.loggedIn;
+          await this.updateAccount();
         } else if (res.status == 202) {
           await store.set("APIClient", res.data);
           this.accountStatus = accountStatus.needsMFA;
@@ -82,6 +89,7 @@ export const useAccountStore = defineStore("accountStore", {
           if (res.status == 200) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.loggedIn;
+            await this.updateAccount();
           } else if (res.status == 202) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.needsMFA;
@@ -96,9 +104,6 @@ export const useAccountStore = defineStore("accountStore", {
     },
     async signoutUser() {
       await store.remove("APIClient");
-      this.accountStatus = accountStatus.notLoggedIn;
-    },
-    async markSignedOut() {
       this.accountStatus = accountStatus.notLoggedIn;
     },
     async getSkins(): Promise<Skin[]> {
@@ -127,6 +132,7 @@ export const useAccountStore = defineStore("accountStore", {
         }
       } catch (error) {
         console.error("Error getting store", error);
+        await this.tryReauth();
       }
       return { bundles: [], skins: [], remainingTime: 0 };
     },
@@ -209,10 +215,10 @@ export const useAccountStore = defineStore("accountStore", {
         console.error("Error getting wishlist", error);
       }
     },
-    async updateSettings() {
+    async updateAccount() {
       try {
         const res = await axios.post(
-          import.meta.env.VITE_BACKEND_URL + "/settings/get",
+          import.meta.env.VITE_BACKEND_URL + "/account",
           {
             APIClient: await store.get("APIClient"),
           }
@@ -220,11 +226,13 @@ export const useAccountStore = defineStore("accountStore", {
         if (res.status == 200) {
           this.notificationEnabled = res.data.notify;
           this.wishlist = res.data.skins;
+          this.wallet = res.data.wallet;
+          this.user = res.data.user;
         }
       } catch (error) {
         console.error("Error updating config", error);
+        await this.tryReauth();
       }
-      return [];
     },
   },
 });

@@ -119,13 +119,7 @@ watch(
 
 onMounted(async () => {
   store.value = await accountStore.getStore();
-  if (store.value.skins.length == 0) {
-    await accountStore.markSignedOut();
-    if (await accountStore.tryReauth())
-      store.value = await accountStore.getStore();
-  }
   isLoading.value = false;
-  await accountStore.updateSettings();
 });
 
 function segmentChanged(ev: CustomEvent) {

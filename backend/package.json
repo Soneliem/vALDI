@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npx tsc",
-    "start": "yarn && npx tsc && node dist/index.js",
+    "start": "node dist/index.js",
     "dev": "nodemon index.ts"
   },
   "dependencies": {

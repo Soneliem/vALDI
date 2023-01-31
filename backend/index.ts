@@ -4,7 +4,7 @@ import ValAPI from "@valapi/valorant-api.com";
 import { Weapons } from "@valapi/valorant-api.com/dist/service/Weapons";
 import express from "express";
 import cors from "cors";
-import { Bundle, Skin, Store, dbUser, StoreOffer } from "./models";
+import { Bundle, Skin, Store, dbUser, StoreOffer, Account } from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
 var admin = require("firebase-admin");
@@ -35,7 +35,7 @@ app.options("*", cors(options));
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
-    const apiClient = new client({ region: req.body.region });
+    const apiClient: client = new client({ region: req.body.region });
     await apiClient.login(req.body.username, req.body.password);
     if (apiClient.isMultifactorAccount) {
       return res.status(202).send(apiClient.toJSON());
@@ -57,29 +57,49 @@ app.post("/mfa", async function (req, res, next) {
   }
 });
 
-app.post("/settings/get", async function (req, res, next) {
+app.post("/account", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body.APIClient);
+    await apiClient.refresh();
     const valAPI = new ValAPI({});
+    const uuid = apiClient.getSubject();
+    const [wallet, userInfo, xp] = await Promise.all([
+      apiClient.Store.getWallet(uuid),
+      apiClient.getUserInfo(),
+      apiClient.AccountXP.getPlayer(uuid),
+    ]);
+    const user = <Account>{
+      user: {
+        username:
+          userInfo.data.acct.game_name + "#" + userInfo.data.acct.tag_line,
+        level: xp.data.Progress.Level,
+      },
+      wallet: {
+        vp: wallet.data.Balances["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+        rp: wallet.data.Balances["e59aa87c-4cbf-517a-5983-6e81511be9b7"],
+      },
+      skins: [],
+      notify: false,
+    };
     const dbUser = await User.findOne({
       where: {
-        id: apiClient.getSubject(),
+        id: uuid,
       },
     });
-    if (!dbUser) {
-      return res.status(404).json("User not found.");
+    if (dbUser) {
+      const [offers, apiSkins] = await Promise.all([
+        apiClient.Store.getOffers(),
+        getAllSkins(valAPI),
+      ]);
+      const skins = await skinIdsToSkins(
+        dbUser.skins,
+        offers.data.Offers,
+        apiSkins
+      );
+      user.skins = skins;
+      user.notify = dbUser.notify;
     }
-    const [offers, apiSkins] = await Promise.all([
-      apiClient.Store.getOffers(),
-      getAllSkins(valAPI),
-    ]);
-    const skins = await skinIdsToSkins(
-      dbUser.skins,
-      offers.data.Offers,
-      apiSkins
-    );
-    dbUser.skins = skins;
-    return res.send(dbUser);
+    return res.send(user);
   } else {
     return res.status(400).json("API Client is required.");
   }
@@ -88,6 +108,7 @@ app.post("/settings/get", async function (req, res, next) {
 app.post("/wishlist", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body.APIClient);
+    await apiClient.refresh();
     const valAPI = new ValAPI({});
     const dbUser = await User.findOne({
       where: {
@@ -120,12 +141,12 @@ app.get("/skins", async function (req, res, next) {
 app.post("/wishlist/add", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.skinId && req.body?.token) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    await apiClient.refresh();
     const valAPI = new ValAPI({});
-
     const userId = apiClient.getSubject();
     const dbUser = await User.findOne({
       where: {
-        id: apiClient.getSubject(),
+        id: userId,
       },
     });
     if (!dbUser) {
@@ -176,6 +197,7 @@ app.post("/wishlist/add", async function (req, res, next) {
 app.post("/wishlist/remove", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.skinId) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    await apiClient.refresh();
     const valAPI = new ValAPI({});
     const userId = apiClient.getSubject();
     const dbUser = await User.findOne({
@@ -245,8 +267,8 @@ app.post("/reauth", async function (req, res, next) {
 app.post("/notify/enable", async function (req, res, next) {
   if (req.body?.APIClient && req.body?.token) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    await apiClient.refresh();
     const userId = apiClient.getSubject();
-
     const dbUser = await User.findOne({
       where: {
         id: userId,
@@ -286,6 +308,7 @@ app.post("/notify/enable", async function (req, res, next) {
 app.post("/notify/disable", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    await apiClient.refresh();
     const userId = apiClient.getSubject();
     const dbUser = await User.findOne({
       where: {
@@ -321,6 +344,7 @@ app.post("/notify/disable", async function (req, res, next) {
 app.post("/store", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body?.APIClient);
+    await apiClient.refresh();
     const valAPI = new ValAPI({});
     // Get store, offers and skin info
     const [rawStore, apiSkins, apiBundles] = await Promise.all([
@@ -387,6 +411,7 @@ async function checkAndNotifyStore() {
     await Promise.all(
       users.map(async (user: dbUser) => {
         const apiClient = client.fromJSON(user.client);
+        await apiClient.refresh();
         const valAPI = new ValAPI({});
         const [rawStore, apiSkins] = await Promise.all([
           apiClient.Store.getStorefront(apiClient.getSubject()),
