@@ -4,6 +4,7 @@ import ValAPI from "@valapi/valorant-api.com";
 import { Weapons } from "@valapi/valorant-api.com/dist/service/Weapons";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import { Bundle, Skin, Store, dbUser, StoreOffer, Account } from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
@@ -29,9 +30,12 @@ const options: cors.CorsOptions = {
   origin: allowlist,
   optionsSuccessStatus: 200,
 };
+
+app.use(helmet());
 app.use(cors(options));
 app.use(express.json());
 app.options("*", cors(options));
+app.disable("x-powered-by");
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
