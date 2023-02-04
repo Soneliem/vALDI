@@ -24,13 +24,55 @@
 
 A simple cross-platform web and mobile app to view your Valorant store. Created by Soneliem.
 
-Name derived after my favourite grocery store that overworks and understaffs its workers.
+Name derived from my favourite grocery store that overworks and understaffs its workers.
+
+### Download
+
+<style>
+div.table1 + table th:first-of-type {
+    width: 200px;
+}
+div.table1 + table th:nth-of-type(2) {
+    width: 75px;
+}
+div.table1 + table th:nth-of-type(3) {
+    width: 75px;
+}
+
+div.table2 + table th {
+    width: 33.33%;
+}
+
+div.table3 + table th:first-of-type {
+    width: 35%;
+}
+div.table3 + table th:nth-of-type(2) {
+    width: 35%;
+}
+div.table3 + table th:nth-of-type(3) {
+    width: 25%;
+}
+</style>
+
+<div class="table1"></div>
+
+|Android|Android (APK)|Web|
+|:---:|:---:|:---:|
+|[![Play Store](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)|[![Releases](assets/github.png)](https://github.com/Soneliem/vALDI/releases)|[![Web](assets/logo.png)](https://valdi.sonel.dev)|
 
 ### Current Features
 
-|View Store|View Bundle|Fun Reveal Mechanic*|Mobile App|
-|:---:|:---:|:---:|:---:|
-|![store](assets/main.png)|![bundle](assets/bundle.png)|![reveal](assets/reveal.png)|![app](assets/mobile.png)|
+<div class="table2"></div>
+
+|View Store|Fun Reveal Mechanic*|Wishlist|
+|:---:|:---:|:---:|
+|![store](assets/main.png)|![reveal](assets/reveal.png)|![wishlist](assets/wishlist.png)|
+
+<div class="table3"></div>
+
+|Daily Store Notifications|View Bundles|Mobile App|
+|:---:|:---:|:---:|
+|![daily](assets/daily.png)|![bundle](assets/bundle.png)|![app](assets/mobile.png)|
 
 #### Other features
 
@@ -48,20 +90,20 @@ Name derived after my favourite grocery store that overworks and understaffs its
 
 ### Are my credentials stored on servers?
 
-No, but your access tokens are stored on your own device's browser
+By default your access tokens (NOT username and password) are stored on your own device's browser. If the wishlist feature or daily notifications are enabled, your access tokens are stored on the server. This is to allow for the wishlist feature and daily notifications to work. You can disable these features at any time to remove your access tokens from the server.
 
 ## Tech Stack
 
 **Client:** Ionic + Vite + Vue + Typescript >
 Deployed on web with [Vercel](https://vercel.com)
 
-**Server:** NodeJS + Express > Deployed on [Qoddi](https://qoddi.com/)
+**Server:** NodeJS + Express 5 > Deployed on [Qoddi](https://qoddi.com/)
 
 Thank you to [Qoddi](https://qoddi.com/) for providing free hosting this project
 
 ## Why?
 
-Making a store checker is a rite of passage for any Valorant App Dev. I am simply following the tradition. I also wanted to learn more about Ionic and the Android app deployment, so this was a good opportunity to do so.
+Making a store checker is a rite of passage for any Valorant App Dev. I am simply following the tradition. I also wanted to learn more about Ionic and the Android app deployment, so this was a good opportunity to do so. Is there are any questionable design decisions in my code of stack, this is why, I am simply experimenting.
 
 ## Run Locally
 
@@ -75,12 +117,6 @@ Install dependencies
 
 ```bash
   yarn
-```
-
-Start the app
-
-```bash
-  yarn run start
 ```
 
 This repo is a Yarn workspace (monorepo), so you can also run the server and client separately if you need to
@@ -105,8 +141,15 @@ Contributions are always welcome! Please use the `development` branch for PRs
 ## Acknowledgements
 
 - [valorant.ts](https://github.com/KTNG-3/valorant-api) for the API wrapper
+- [Valorant-API](https://valorant-api.com/) for the static assets API
 
 ## DISCLAIMER
 
 THIS PROJECT IS NOT ASSOCIATED OR ENDORSED BY RIOT GAMES. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
 By using this application, you agree that you, the individual, are knowingly accessing all information required to be displayed.
+
+Google Play and the Google Play logo are trademarks of Google LLC.
+
+## Privacy Policy
+
+Privacy Policy available [here](https://valdi.sonel.dev/privacy)

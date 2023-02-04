@@ -577,9 +577,11 @@ async function getAllSkins(valAPI: ValAPI) {
   return lowestLevelSkins;
 }
 
-schedule.scheduleJob("1 0 * * *", async () => {
-  await checkAndNotifyStore();
-});
+if (process.env.ENVIRONMENT !== "STAGING") {
+  schedule.scheduleJob("1 0 * * *", async () => {
+    await checkAndNotifyStore();
+  });
+}
 
 process.on("uncaughtException", function (err) {
   console.error(err);

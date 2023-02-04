@@ -89,6 +89,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  loadingController,
   // IonIcon,
 } from "@ionic/vue";
 import StoreItem from "@/components/StoreItem.vue";
@@ -122,6 +123,10 @@ onMounted(async () => {
 });
 
 async function addSkins(id: string) {
+  const loader = await loadingController.create({
+    message: "Adding to Wishlist",
+  });
+  await loader.present();
   if (isPlatform("desktop") || isPlatform("mobileweb")) {
     getToken(messaging, {
       vapidKey:
@@ -153,10 +158,16 @@ async function addSkins(id: string) {
       await accountStore.addWishlistItem(id, token.value);
     });
   }
+  await loader.dismiss();
 }
 
 async function removeSkins(id: string) {
+  const loader = await loadingController.create({
+    message: "Removing from Wishlist",
+  });
+  await loader.present();
   await accountStore.removeWishlistItem(id);
+  await loader.dismiss();
 }
 </script>
 

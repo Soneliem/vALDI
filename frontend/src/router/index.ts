@@ -4,7 +4,9 @@ import { useAccountStore } from "../store/account";
 import TabsPage from "../views/TabsPage.vue";
 
 const authCheck: NavigationGuard = async function (to, from, next) {
-  if (!useAccountStore().isLoggedIn) {
+  if (to.path == "/login" || to.path == "/privacy") {
+    next();
+  } else if (!useAccountStore().isLoggedIn) {
     if (await useAccountStore().tryReauth()) {
       next();
     } else {
@@ -41,6 +43,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "wishlist",
         component: () => import("@/views/WishlistPage.vue"),
         beforeEnter: authCheck,
+      },
+      {
+        path: "privacy",
+        component: () => import("@/views/PolicyPage.vue"),
       },
     ],
   },

@@ -39,9 +39,9 @@ async function logout() {
   isLoading.value = await loadingController.create({
     message: "Logging In...",
   });
-  isLoading.value.present();
+  await isLoading.value.present();
   await accountStore.signoutUser();
-  isLoading.value.dismiss();
+  await isLoading.value.dismiss();
   ionRouter.replace("/login");
 }
 </script>
