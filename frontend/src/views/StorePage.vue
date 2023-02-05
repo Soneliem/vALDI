@@ -100,9 +100,11 @@ import { Store } from "@/models";
 import { inject } from "vue";
 import { getToken, Messaging } from "firebase/messaging";
 import { PushNotifications } from "@capacitor/push-notifications";
-
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const messaging: Messaging = inject("messaging")!;
+let messaging: Messaging;
+if (isPlatform("desktop") || isPlatform("mobileweb")) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  messaging = inject("messaging")!;
+}
 
 const accountStore = useAccountStore();
 let store: Ref<Store> = ref({ bundles: [], skins: [], remainingTime: 0 });
