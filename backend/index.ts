@@ -411,16 +411,7 @@ app.post("/store", async function (req, res, next) {
   }
 });
 
-// The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
-
-// Optional fallthrough error handler
-app.use(function onError(err: any, req: any, res: any, next: any) {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
-  res.statusCode = 500;
-  res.end(res.sentry + "\n");
-});
 
 const server = app.listen(8080, function () {
   console.log("Web server listening on port", 8080);
@@ -428,18 +419,23 @@ const server = app.listen(8080, function () {
 
 server.setTimeout(10000);
 
-console.log({
-  type: process.env.FIREBASE_TYPE,
-  project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY,
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  client_id: process.env.FIREBASE_CLIENT_ID,
-  auth_uri: process.env.FIREBASE_AUTH_URI,
-  token_uri: process.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-});
+console.log(
+  JSON.stringify({
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY
+      ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
+      : undefined,
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url:
+      process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+  })
+);
 
 try {
   admin.initializeApp({
@@ -447,7 +443,9 @@ try {
       type: process.env.FIREBASE_TYPE,
       project_id: process.env.FIREBASE_PROJECT_ID,
       private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-      private_key: process.env.FIREBASE_PRIVATE_KEY,
+      private_key: process.env.FIREBASE_PRIVATE_KEY
+        ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
+        : undefined,
       client_email: process.env.FIREBASE_CLIENT_EMAIL,
       client_id: process.env.FIREBASE_CLIENT_ID,
       auth_uri: process.env.FIREBASE_AUTH_URI,
@@ -458,6 +456,7 @@ try {
     }),
   });
 } catch (e) {
+  Sentry.captureException(e);
   console.error(e);
 }
 
@@ -522,6 +521,7 @@ async function checkAndNotifyStore() {
             })
             .catch((error) => {
               console.error("Error sending message:", error);
+              Sentry.captureException(error);
             });
         }
 
@@ -560,6 +560,7 @@ async function checkAndNotifyStore() {
             })
             .catch((error) => {
               console.error("Error sending message:", error);
+              Sentry.captureException(error);
             });
         }
       })
@@ -629,9 +630,11 @@ if (process.env.ENVIRONMENT !== "STAGING") {
 }
 
 process.on("uncaughtException", function (err) {
+  Sentry.captureException(err);
   console.error(err);
 });
 
 process.on("unhandledRejection", function (err) {
+  Sentry.captureException(err);
   console.error(err);
 });
