@@ -455,8 +455,7 @@ try {
     }),
   });
 } catch (e) {
-  Sentry.captureException(e);
-  console.error(e);
+  reportError("Error initialising firebase:", e);
 }
 
 async function checkAndNotifyStore() {
@@ -517,8 +516,7 @@ async function checkAndNotifyStore() {
               },
             })
             .catch((error) => {
-              console.error("Error sending message:", error);
-              Sentry.captureException(error);
+              reportError("Error sending message:", error);
             });
         }
 
@@ -556,8 +554,7 @@ async function checkAndNotifyStore() {
               },
             })
             .catch((error) => {
-              console.error("Error sending message:", error);
-              Sentry.captureException(error);
+              reportError("Error sending message:", error);
             });
         }
       })
@@ -623,12 +620,7 @@ if (process.env.ENVIRONMENT !== "STAGING") {
   });
 }
 
-process.on("uncaughtException", function (err) {
+function reportError(msg: string, err: any) {
+  console.error(msg, err);
   Sentry.captureException(err);
-  console.error(err);
-});
-
-process.on("unhandledRejection", function (err) {
-  Sentry.captureException(err);
-  console.error(err);
-});
+}
