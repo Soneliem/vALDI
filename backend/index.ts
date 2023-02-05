@@ -5,6 +5,7 @@ import { Weapons } from "@valapi/valorant-api.com/dist/service/Weapons";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import { Bundle, Skin, Store, dbUser, StoreOffer, Account } from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
@@ -36,14 +37,16 @@ const options: cors.CorsOptions = {
 app.use(helmet());
 app.use(cors(options));
 app.use(express.json());
+app.use(compression());
 app.options("*", cors(options));
 app.disable("x-powered-by");
 Sentry.init({
-  dsn: "https://2dfcc1fc0db84455b6869e6c85e5073f@o4504625516380160.ingest.sentry.io/4504625518411776",
+  dsn: process.env.SENTRY_DSN,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app }),
   ],
+  environment: process.env.ENVIRONMENT,
   tracesSampleRate: 1.0,
 });
 
@@ -80,38 +83,43 @@ app.post("/account", async function (req, res, next) {
     await apiClient.refresh();
     const valAPI = new ValAPI({});
     const uuid = apiClient.getSubject();
-    const [wallet, userInfo, xp] = await Promise.all([
-      apiClient.Store.getWallet(uuid),
-      apiClient.getUserInfo(),
-      apiClient.AccountXP.getPlayer(uuid),
-    ]);
-    const user = <Account>{
-      user: {
-        username:
-          userInfo.data.acct.game_name + "#" + userInfo.data.acct.tag_line,
-        level: xp.data.Progress.Level,
-      },
-      wallet: {
-        vp: wallet.data.Balances["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
-        rp: wallet.data.Balances["e59aa87c-4cbf-517a-5983-6e81511be9b7"],
-      },
-      skins: [],
-      notify: false,
-    };
     const dbUser = await User.findOne({
       where: {
         id: uuid,
       },
     });
-    if (dbUser) {
-      const [offers, apiSkins] = await Promise.all([
+    let functions: any[] = [
+      apiClient.Store.getWallet(uuid),
+      apiClient.getUserInfo(),
+      apiClient.AccountXP.getPlayer(uuid),
+    ];
+
+    if (dbUser)
+      functions = functions.concat([
         apiClient.Store.getOffers(),
         getAllSkins(valAPI),
       ]);
+
+    const results = await Promise.all(functions);
+    const user = <Account>{
+      user: {
+        username:
+          results[1].data.acct.game_name + "#" + results[1].data.acct.tag_line,
+        level: results[2].data.Progress.Level,
+      },
+      wallet: {
+        vp: results[0].data.Balances["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+        rp: results[0].data.Balances["e59aa87c-4cbf-517a-5983-6e81511be9b7"],
+      },
+      skins: [],
+      notify: false,
+    };
+
+    if (dbUser) {
       const skins = await skinIdsToSkins(
         dbUser.skins,
-        offers.data.Offers,
-        apiSkins
+        results[3].data.Offers,
+        results[4]
       );
       user.skins = skins;
       user.notify = dbUser.notify;
@@ -378,6 +386,15 @@ app.post("/store", async function (req, res, next) {
       apiSkins
     );
 
+    // TODO: Implement nightmarket
+    // let bonusSkins = [];
+    // if (rawStore?.data?.BonusStore) {
+    //   bonusSkins = await storeToSkins(
+    //     rawStore?.data?.BonusStore?.SingleItemStoreOffers,
+    //     apiSkins
+    //   );
+    // }
+
     const bundles: Bundle[] = await Promise.all(
       rawStore.data.FeaturedBundle.Bundles.map(async (rawBundle: any) => {
         // Get the bundle info from ValAPI
@@ -419,24 +436,6 @@ const server = app.listen(8080, function () {
 
 server.setTimeout(10000);
 
-console.log(
-  JSON.stringify({
-    type: process.env.FIREBASE_TYPE,
-    project_id: process.env.FIREBASE_PROJECT_ID,
-    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY
-      ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
-      : undefined,
-    client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    client_id: process.env.FIREBASE_CLIENT_ID,
-    auth_uri: process.env.FIREBASE_AUTH_URI,
-    token_uri: process.env.FIREBASE_TOKEN_URI,
-    auth_provider_x509_cert_url:
-      process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  })
-);
-
 try {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -473,8 +472,6 @@ async function checkAndNotifyStore() {
         ]);
 
         if (!rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers) return;
-
-        // check if wishlist item exists in store
 
         const foundSkins: StoreOffer[] = [];
         user.skins.forEach((skin) => {
@@ -571,9 +568,7 @@ async function checkAndNotifyStore() {
 async function skinIdsToSkins(skins: string[], offers: any[], apiSkins: any) {
   return await Promise.all(
     skins.map(async (rawSkin: string) => {
-      // Get the skin info from ValAPI
       const skinData = apiSkins.find((skin: any) => skin.uuid === rawSkin);
-      // Get the skin price from the Offers endpoint
       const offer = offers.find((offer: any) => offer.OfferID === rawSkin);
       let price = 0;
       if (offer) {
@@ -597,7 +592,6 @@ async function storeToSkins(
 ) {
   return await Promise.all(
     store.map(async (rawSkin: StoreOffer) => {
-      // Get the skin info from ValAPI
       const skinData = apiSkins.find(
         (skin: any) => skin.uuid === rawSkin.OfferID
       );
