@@ -8,6 +8,8 @@ import helmet from "helmet";
 import { Bundle, Skin, Store, dbUser, StoreOffer, Account } from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
 var admin = require("firebase-admin");
 import { getMessaging } from "firebase-admin/messaging";
 
@@ -36,6 +38,17 @@ app.use(cors(options));
 app.use(express.json());
 app.options("*", cors(options));
 app.disable("x-powered-by");
+Sentry.init({
+  dsn: "https://2dfcc1fc0db84455b6869e6c85e5073f@o4504625516380160.ingest.sentry.io/4504625518411776",
+  integrations: [
+    new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: 1.0,
+});
+
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 app.post("/auth", async function (req, res, next) {
   if (req.body?.username && req.body?.password && req.body?.region) {
@@ -398,6 +411,17 @@ app.post("/store", async function (req, res, next) {
   }
 });
 
+// The error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler());
+
+// Optional fallthrough error handler
+app.use(function onError(err: any, req: any, res: any, next: any) {
+  // The error id is attached to `res.sentry` to be returned
+  // and optionally displayed to the user for support.
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
+});
+
 const server = app.listen(8080, function () {
   console.log("Web server listening on port", 8080);
 });
@@ -417,21 +441,25 @@ console.log({
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
 });
 
-admin.initializeApp({
-  credential: admin.credential.cert({
-    type: process.env.FIREBASE_TYPE,
-    project_id: process.env.FIREBASE_PROJECT_ID,
-    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY,
-    client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    client_id: process.env.FIREBASE_CLIENT_ID,
-    auth_uri: process.env.FIREBASE_AUTH_URI,
-    token_uri: process.env.FIREBASE_TOKEN_URI,
-    auth_provider_x509_cert_url:
-      process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-  }),
-});
+try {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      type: process.env.FIREBASE_TYPE,
+      project_id: process.env.FIREBASE_PROJECT_ID,
+      private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+      private_key: process.env.FIREBASE_PRIVATE_KEY,
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      client_id: process.env.FIREBASE_CLIENT_ID,
+      auth_uri: process.env.FIREBASE_AUTH_URI,
+      token_uri: process.env.FIREBASE_TOKEN_URI,
+      auth_provider_x509_cert_url:
+        process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+      client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+    }),
+  });
+} catch (e) {
+  console.error(e);
+}
 
 async function checkAndNotifyStore() {
   User.findAll().then(async (users: dbUser[]) => {

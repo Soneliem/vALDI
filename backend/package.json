@@ -9,6 +9,8 @@
     "dev": "nodemon index.ts"
   },
   "dependencies": {
+    "@sentry/node": "^7.36.0",
+    "@sentry/tracing": "^7.36.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^5.0.0-beta.1",
