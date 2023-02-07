@@ -19,5 +19,8 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "resolutions": {
+    "qs": "^6.9.7"
+  }
 }

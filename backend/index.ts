@@ -628,7 +628,6 @@ async function getBundles() {
   if (cache.has("bundles")) return cache.get("bundles") as Bundles.Bundles[];
   const valAPI = new ValAPI();
   const res = await valAPI.Bundles.get();
-  res.data.data = undefined;
   if (!res.data?.data) return [];
   cache.set("bundles", res.data.data, 86400);
   return res.data.data;
