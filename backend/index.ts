@@ -278,10 +278,9 @@ app.post("/wishlist/remove", async function (req, res, next) {
 app.post("/reauth", async function (req, res, next) {
   if (req.body?.APIClient) {
     const apiClient = client.fromJSON(req.body?.APIClient);
-    try {
-      await apiClient.refresh();
-    } catch (e) {
-      await apiClient.fromCookie(apiClient.toJSON().cookie.ssid);
+    await apiClient.refresh();
+    if (apiClient.isAuthenticationError) {
+      return res.status(401).json("Reauth Failed");
     }
     res.send(apiClient.toJSON());
   } else {

@@ -34,6 +34,7 @@ export const useAccountStore = defineStore("accountStore", {
           if (res.status == 200) {
             await store.set("APIClient", res.data);
             this.accountStatus = accountStatus.loggedIn;
+            console.log("Reauthed");
             await this.updateAccount();
             return true;
           } else {

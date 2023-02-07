@@ -20,6 +20,7 @@
                     <ion-label position="floating">Username</ion-label>
                     <ion-input
                       appAutofill
+                      autocomplete="username"
                       v-model="form.username"
                       inputmode="email"
                       id="username"
@@ -31,6 +32,7 @@
                     <ion-label position="floating">Password</ion-label>
                     <ion-input
                       appAutofill
+                      autocomplete="current-password"
                       type="password"
                       v-model="form.password"
                       id="password"
