@@ -1,5 +1,5 @@
 <template>
-  <ion-card v-if="loading" style="width: auto">
+  <ion-card v-if="loading" style="width: fit-content">
     <ion-card-content>
       <ion-skeleton-text
         :animated="true"
@@ -21,8 +21,8 @@
       </ion-card-subtitle>
     </ion-card-header>
   </ion-card>
-  <ion-card v-if="!loading" style="width: auto" @click="show = true">
-    <ion-card-content class="ion-padding" :class="{ rgb: show }">
+  <ion-card v-if="!loading" style="width: fit-content" @click="show = true">
+    <ion-card-content class="ion-padding card-content" :class="{ rgb: show }">
       <img class="image" :alt="name" :class="{ show: show }" :src="image" />
     </ion-card-content>
     <ion-card-header>
@@ -42,6 +42,9 @@
         ></ion-card-subtitle
       >
     </ion-card-header>
+    <ion-button v-if="removeButton" @click="$emit('remove')" fill="clear"
+      >Remove</ion-button
+    >
   </ion-card>
 </template>
 
@@ -53,17 +56,25 @@ import {
   IonCardTitle,
   IonCardContent,
   IonSkeletonText,
+  IonButton,
 } from "@ionic/vue";
-import { defineProps, ref } from "vue";
+import { defineProps, ref, defineEmits } from "vue";
 
-defineProps<{
+const props = defineProps<{
   name?: string;
   image?: string;
   price?: number;
   loading?: boolean;
+  show?: boolean;
+  removeButton?: boolean;
 }>();
 
+defineEmits(["remove"]);
+
 const show = ref(false);
+if (props.show) {
+  show.value = true;
+}
 </script>
 
 <style scoped>
