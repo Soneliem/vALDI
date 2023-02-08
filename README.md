@@ -1,8 +1,10 @@
-  <a href="https://github.com/Soneliem/vALDI" align="center">
+<p align="center">
+  <a href="https://github.com/Soneliem/vALDI">
     <img src="assets/logo.png" alt="Logo" width="90" height="90">
   </a>
+</p>
 <h3 align="center">vALDI - a Valorant store checker</h3>
-<a href="https://valdi.sonel.dev"><h1 align="center">valdi.sonel.dev</h1></a>
+<h1 align="center"><a href="https://valdi.sonel.dev">valdi.sonel.dev </a></h1>
 
   <p align="center">
     A cross-platform web and mobile app to view your valorant store</p>
