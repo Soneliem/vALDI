@@ -15,6 +15,7 @@ import * as Tracing from "@sentry/tracing";
 var admin = require("firebase-admin");
 import { getMessaging } from "firebase-admin/messaging";
 import NodeCache from "node-cache";
+import rateLimit from "express-rate-limit";
 
 const cache = new NodeCache();
 const app = express();
@@ -37,10 +38,18 @@ const options: cors.CorsOptions = {
   optionsSuccessStatus: 200,
 };
 
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use(helmet());
 app.use(cors(options));
 app.use(express.json());
 app.use(compression());
+app.use(limiter);
 app.options("*", cors(options));
 app.disable("x-powered-by");
 Sentry.init({
