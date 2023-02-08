@@ -9,7 +9,7 @@
     "dev": "nodemon index.ts"
   },
   "engines": {
-    "node": ">=19.06.0",
+    "node": "19",
     "npm": ">=9.4.0"
   },
   "dependencies": {
