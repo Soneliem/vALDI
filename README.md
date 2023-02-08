@@ -1,8 +1,6 @@
-<p align="center">
-  <a href="https://github.com/Soneliem/WAIUA">
+  <a href="https://github.com/Soneliem/vALDI" align="center">
     <img src="assets/logo.png" alt="Logo" width="90" height="90">
   </a>
-</p>
 <h3 align="center">vALDI - a Valorant store checker</h3>
 <a href="https://valdi.sonel.dev"><h1 align="center">valdi.sonel.dev</h1></a>
 
@@ -28,37 +26,9 @@ Name derived from my favourite grocery store that overworks and understaffs its 
 
 ### Download
 
-<style>
-div.table1 + table th:first-of-type {
-    width: 200px;
-}
-div.table1 + table th:nth-of-type(2) {
-    width: 75px;
-}
-div.table1 + table th:nth-of-type(3) {
-    width: 75px;
-}
-
-div.table2 + table th {
-    width: 33.33%;
-}
-
-div.table3 + table th:first-of-type {
-    width: 35%;
-}
-div.table3 + table th:nth-of-type(2) {
-    width: 35%;
-}
-div.table3 + table th:nth-of-type(3) {
-    width: 25%;
-}
-</style>
-
-<div class="table1"></div>
-
 |Android|Android (APK)|Web|
-|:---:|:---:|:---:|
-|[![Play Store](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)|[![Releases](assets/github.png)](https://github.com/Soneliem/vALDI/releases)|[![Web](assets/logo.png)](https://valdi.sonel.dev)|
+|:-----:|:-----------:|:---:|
+|<a href="(https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png )](https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200px"/></a>|<a href="https://github.com/Soneliem/vALDI/releases"><img src="assets/github.png" width="75px"/></a>|<a href="https://valdi.sonel.dev"><img src="assets/logo.png" width="75px"/></a>|
 
 ### Current Features
 
