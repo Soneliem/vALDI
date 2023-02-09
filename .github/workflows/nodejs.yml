@@ -17,12 +17,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
           cache: "yarn"
-      - run: yarn workspaces focus backend
-        working-directory: "backend"
-      - run: yarn run build
-        working-directory: "backend"
+
+      - name: Install dependencies
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: "backend"
+        env:
+          NODE_ENV: development
+
+      - name: Build
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: "backend"
+        env:
+          NODE_ENV: development
