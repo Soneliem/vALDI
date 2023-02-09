@@ -4067,7 +4067,7 @@ __metadata:
     cors: ^2.8.5
     dotenv: ^16.0.3
     express: ^5.0.0-beta.1
-    express-rate-limit: ^6.7.0
+    express-rate-limit: Soneliem/express-rate-limit
     firebase-admin: ^11.5.0
     helmet: ^6.0.1
     node-cache: ^5.1.2
@@ -5797,10 +5797,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-rate-limit@npm:^6.7.0":
+express-rate-limit@Soneliem/express-rate-limit:
   version: 6.7.0
-  resolution: "express-rate-limit@npm:6.7.0"
-  checksum: 7bd3f298b202cdb11c3d7c2dcff9be12c6885be5e64fb112f6c79103ba93a8e5d899ce15a5a3ce48f82190ab3515bed403e067dc3e42fc2832558cbe2620f955
+  resolution: "express-rate-limit@https://github.com/Soneliem/express-rate-limit.git#commit=71715e111e4584e6d49300698b0a603d51e62808"
+  checksum: ecd6b0a59d051b3e4bb6fae7a678c60e62f23ad0a0616a1a9911e703ee6062754f829a1b6d38df679e4789b4a79af524504096fd498b06ebce5894a818915e9c
   languageName: node
   linkType: hard
 
