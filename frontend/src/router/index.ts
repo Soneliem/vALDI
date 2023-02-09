@@ -30,10 +30,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/AccountPage.vue"),
         beforeEnter: authCheck,
       },
-      {
-        path: "login",
-        component: () => import("@/views/LoginPage.vue"),
-      },
+
       {
         path: "store",
         component: () => import("@/views/StorePage.vue"),
@@ -44,11 +41,15 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/WishlistPage.vue"),
         beforeEnter: authCheck,
       },
-      {
-        path: "privacy",
-        component: () => import("@/views/PolicyPage.vue"),
-      },
     ],
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/LoginPage.vue"),
+  },
+  {
+    path: "/privacy",
+    component: () => import("@/views/PolicyPage.vue"),
   },
 ];
 

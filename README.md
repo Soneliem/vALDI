@@ -30,7 +30,7 @@ Name derived from my favourite grocery store that overworks and understaffs its 
 
 |Android|Android (APK)|Web|
 |:-----:|:-----------:|:---:|
-|<a href="(https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png )](https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200px"/></a>|<a href="https://github.com/Soneliem/vALDI/releases"><img src="assets/github.png" width="75px"/></a>|<a href="https://valdi.sonel.dev"><img src="assets/logo.png" width="75px"/></a>|
+|<a href="https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200px"/></a>|<a href="https://github.com/Soneliem/vALDI/releases"><img src="assets/github.png" width="75px"/></a>|<a href="https://valdi.sonel.dev"><img src="assets/logo.png" width="75px"/></a>|
 
 ### Current Features
 
