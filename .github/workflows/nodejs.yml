@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: "yarn"
-      - run: yarn install --production=false
+      - run: yarn install
         working-directory: "backend"
       - run: yarn run build
         working-directory: "backend"
