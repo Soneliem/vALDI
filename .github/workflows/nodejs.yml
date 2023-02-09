@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: ["master"]
 
+env:
+  NODE_ENV: development
+
 jobs:
   pre_job:
     continue-on-error: true # Uncomment once integration is finished
