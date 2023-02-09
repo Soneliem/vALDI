@@ -22,5 +22,6 @@
   ],
   "resolutions": {
     "qs": "^6.9.7"
-  }
+  },
+  "packageManager": "yarn@3.4.1"
 }
