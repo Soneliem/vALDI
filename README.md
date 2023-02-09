@@ -15,6 +15,7 @@
     <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev&logo=vue.js">
     <img alt="Vercel" src="https://therealsujitk-vercel-badge.vercel.app/?app=valdi-soneliem&logo=true">
     <img alt="CodeQL" src="https://github.com/Soneliem/vALDI/actions/workflows/codeql.yml/badge.svg">
+    <img alt="Backend" src="https://github.com/Soneliem/vALDI/actions/workflows/nodejs.yml/badge.svg">
     <img alt="Play Store" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Ddev.sonel.valdi%26l%3DAndroid%26m%3D%24version&logo=google-play">
   <br />
 
