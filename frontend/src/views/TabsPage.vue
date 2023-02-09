@@ -2,10 +2,7 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar
-        slot="bottom"
-        v-if="$router.currentRoute.value.path != '/login'"
-      >
+      <ion-tab-bar slot="bottom">
         <ion-tab-button tab="store" href="/store">
           <ion-icon :icon="basketOutline" />
           <ion-label>Store</ion-label>

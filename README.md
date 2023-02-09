@@ -12,9 +12,10 @@
     <a href="https://discord.gg/X7CYCeZSRK">
       <img alt="Discord" src="https://img.shields.io/discord/881790284613185546?color=blue&label=discord&logo=discord">
     </a>
-    <img alt="GitHub" src="https://img.shields.io/github/license/Soneliem/vALDI?logo=github">
     <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fvaldi.sonel.dev&logo=vue.js">
     <img alt="Vercel" src="https://therealsujitk-vercel-badge.vercel.app/?app=valdi-soneliem&logo=true">
+    <img alt="CodeQL" src="https://github.com/Soneliem/vALDI/actions/workflows/codeql.yml/badge.svg">
+    <img alt="Backend" src="https://github.com/Soneliem/vALDI/actions/workflows/nodejs.yml/badge.svg">
     <img alt="Play Store" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Ddev.sonel.valdi%26l%3DAndroid%26m%3D%24version&logo=google-play">
   <br />
 
@@ -30,7 +31,7 @@ Name derived from my favourite grocery store that overworks and understaffs its 
 
 |Android|Android (APK)|Web|
 |:-----:|:-----------:|:---:|
-|<a href="(https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png )](https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200px"/></a>|<a href="https://github.com/Soneliem/vALDI/releases"><img src="assets/github.png" width="75px"/></a>|<a href="https://valdi.sonel.dev"><img src="assets/logo.png" width="75px"/></a>|
+|<a href="https://play.google.com/store/apps/details?id=dev.sonel.valdi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200px"/></a>|<a href="https://github.com/Soneliem/vALDI/releases"><img src="assets/github.png" width="75px"/></a>|<a href="https://valdi.sonel.dev"><img src="assets/logo.png" width="75px"/></a>|
 
 ### Current Features
 
