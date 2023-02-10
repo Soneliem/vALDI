@@ -18,6 +18,16 @@ const authCheck: NavigationGuard = async function (to, from, next) {
 };
 const routes: Array<RouteRecordRaw> = [
   {
+    name: "login",
+    path: "/login",
+    component: () => import("@/views/LoginPage.vue"),
+  },
+  {
+    name: "privacy",
+    path: "/privacy",
+    component: () => import("@/views/PolicyPage.vue"),
+  },
+  {
     path: "/",
     component: TabsPage,
     children: [
@@ -42,14 +52,6 @@ const routes: Array<RouteRecordRaw> = [
         beforeEnter: authCheck,
       },
     ],
-  },
-  {
-    path: "/login",
-    component: () => import("@/views/LoginPage.vue"),
-  },
-  {
-    path: "/privacy",
-    component: () => import("@/views/PolicyPage.vue"),
   },
 ];
 
