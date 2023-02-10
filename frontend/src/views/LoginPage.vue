@@ -85,9 +85,10 @@
                   Valorant store. Created by Soneliem. <br /><br />
                   Name derived after my favourite grocery store that overworks
                   and understaffs its workers
-                  <br /><br />Also check out
-                  <a href="https://waiua.sonel.dev">WAIUA for Valorant</a
-                  >!</ion-card-subtitle
+                  <br /><br />
+                  <a href="https://valdi.sonel.dev/privacy"
+                    >Privacy Policy</a
+                  ></ion-card-subtitle
                 >
               </ion-card-header>
               <ion-card-content>
