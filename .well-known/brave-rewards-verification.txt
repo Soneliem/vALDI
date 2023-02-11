@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: sonel.dev
+Token: 5531383d54b451da2942707dc20283dd7757d1bd3bc526f22c3b885eab9dea6b

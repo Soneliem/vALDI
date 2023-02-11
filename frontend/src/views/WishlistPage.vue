@@ -125,6 +125,8 @@ onMounted(async () => {
 async function addSkins(id: string) {
   const loader = await loadingController.create({
     message: "Adding to Wishlist",
+    spinner: "dots",
+    animated: true,
   });
   await loader.present();
   if (isPlatform("desktop") || isPlatform("mobileweb")) {
@@ -164,6 +166,8 @@ async function addSkins(id: string) {
 async function removeSkins(id: string) {
   const loader = await loadingController.create({
     message: "Removing from Wishlist",
+    spinner: "dots",
+    animated: true,
   });
   await loader.present();
   await accountStore.removeWishlistItem(id);

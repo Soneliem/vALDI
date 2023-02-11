@@ -24,7 +24,7 @@
 
 A simple cross-platform web and mobile app to view your Valorant store. Created by Soneliem.
 
-Name derived from my favourite grocery store that overworks and understaffs its workers.
+Name derived from my favourite grocery store that overworks and under staffs its workers.
 
 ### Download
 
@@ -62,7 +62,7 @@ Name derived from my favourite grocery store that overworks and understaffs its 
 
 ### Are my credentials stored on servers?
 
-By default your access tokens (NOT username and password) are stored on your own device's browser. If the wishlist feature or daily notifications are enabled, your access tokens are stored on the server. This is to allow for the wishlist feature and daily notifications to work. You can disable these features at any time to remove your access tokens from the server.
+By default, your access tokens (NOT username and password) are stored on your own device's browser. If the wishlist feature or daily notifications are enabled, your access tokens are stored on the server. This is to allow for the wishlist feature and daily notifications to work. You can disable these features at any time to remove your access tokens from the server.
 
 ## Tech Stack
 
