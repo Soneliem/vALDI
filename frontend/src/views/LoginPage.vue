@@ -191,7 +191,9 @@ const mfaOpen = ref(false);
 
 async function showLoading() {
   isLoading.value = await loadingController.create({
-    message: "Logging In...",
+    message: "Logging In",
+    spinner: "dots",
+    animated: true,
   });
   isLoading.value.present();
 }

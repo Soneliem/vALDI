@@ -2,19 +2,28 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { NavigationGuard, RouteRecordRaw } from "vue-router";
 import { useAccountStore } from "../store/account";
 import TabsPage from "../views/TabsPage.vue";
+import { loadingController } from "@ionic/vue";
 
 const authCheck: NavigationGuard = async function (to, from, next) {
-  if (to.path == "/login" || to.path == "/privacy") {
-    next();
-  } else if (!useAccountStore().isLoggedIn) {
-    if (await useAccountStore().tryReauth()) {
-      next();
-    } else {
+  const loading = await loadingController.create({
+    message: "Loading Page",
+    spinner: "dots",
+    animated: true,
+  });
+
+  await loading.present();
+  if (
+    to.path != "/login" &&
+    to.path != "/privacy" &&
+    !useAccountStore().isLoggedIn
+  ) {
+    if (!(await useAccountStore().tryReauth())) {
+      await loading.dismiss();
       next({ path: "/login" });
     }
-  } else {
-    next();
   }
+  await loading.dismiss();
+  next();
 };
 const routes: Array<RouteRecordRaw> = [
   {

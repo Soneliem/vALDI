@@ -37,7 +37,9 @@ const isLoading = ref();
 
 async function logout() {
   isLoading.value = await loadingController.create({
-    message: "Logging In...",
+    message: "Logging In",
+    spinner: "dots",
+    animated: true,
   });
   await isLoading.value.present();
   await accountStore.signoutUser();

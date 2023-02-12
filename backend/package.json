@@ -1,6 +1,5 @@
 {
   "name": "backend",
-  "version": "0.3.0",
   "description": "Backend API for vALDI",
   "license": "MIT",
   "scripts": {
