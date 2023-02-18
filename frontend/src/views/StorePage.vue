@@ -7,6 +7,10 @@
             <ion-label>Daily</ion-label>
             <ion-icon :icon="timeOutline" />
           </ion-segment-button>
+          <ion-segment-button value="nightMarket" v-if="store.nightMarket">
+            <ion-label>Night Market</ion-label>
+            <ion-icon :icon="timeOutline" />
+          </ion-segment-button>
           <ion-segment-button value="bundles">
             <ion-label>Bundles</ion-label>
             <ion-icon :icon="albumsOutline" />
@@ -42,6 +46,30 @@
               :image="item.image"
               :name="item.name"
               :price="item.price"
+            ></StoreItem>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid v-if="segment == 'nightMarket'">
+        <ion-row class="ion-justify-content-center" v-if="isLoading">
+          <ion-col size="auto" v-for="i in 6" v-bind:key="i">
+            <StoreItem :loading="true"></StoreItem>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center" v-if="!isLoading">
+          <ion-col
+            size="auto"
+            v-for="item in store.nightMarket"
+            v-bind:key="item.uuid"
+          >
+            <StoreItem
+              :loading="false"
+              :image="item.image"
+              :name="item.name"
+              :price="item.price"
+              :originalPrice="item.originalPrice"
+              :discount="item.discount"
             ></StoreItem>
           </ion-col>
         </ion-row>

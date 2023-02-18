@@ -7,7 +7,16 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-import { Bundle, Skin, Store, dbUser, StoreOffer, Account } from "./models";
+import {
+  Bundle,
+  Skin,
+  Store,
+  dbUser,
+  StoreOffer,
+  Account,
+  MightmarketOffer,
+  NightSkin,
+} from "./models";
 import { User } from "./db";
 import schedule from "node-schedule";
 import * as Sentry from "@sentry/node";
@@ -408,13 +417,14 @@ app.post("/store", async function (req, res) {
     };
 
     // TODO: Implement nightmarket
-    // let bonusSkins = [];
-    // if (rawStore?.data?.BonusStore) {
-    //   bonusSkins = await storeToSkins(
-    //     rawStore?.data?.BonusStore?.SingleItemStoreOffers,
-    //     apiSkins
-    //   );
-    // }
+
+    if (rawStore?.data?.BonusStore) {
+      const bonusSkins = await nightStoreToSkins(
+        rawStore?.data?.BonusStore?.BonusStoreOffers,
+        apiSkins
+      );
+      store.nightMarket = bonusSkins;
+    }
 
     if (apiBundles) {
       store.bundles = await Promise.all(
@@ -485,7 +495,13 @@ async function checkAndNotifyStore() {
           getAllSkins(),
         ]);
 
-        if (!rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers) return;
+        if (!rawStore?.data?.SkinsPanelLayout?.SingleItemStoreOffers) {
+          sendMessage(
+            "VALDI",
+            "Could not check your store, sign in to reauthenticate",
+            user.tokens
+          );
+        }
 
         const foundSkins: StoreOffer[] = [];
         user.skins.forEach((skin) => {
@@ -509,30 +525,7 @@ async function checkAndNotifyStore() {
           if (skins.length > 1)
             message = `Your wishlisted skins, ${newSkinsString}, are your store!`;
 
-          getMessaging()
-            .sendMulticast({
-              notification: {
-                title: "VALDI: RIP Your Wallet",
-                body: message,
-              },
-              tokens: user.tokens,
-              android: {
-                notification: {
-                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
-                },
-              },
-              webpush: {
-                notification: {
-                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
-                },
-                fcmOptions: {
-                  link: "https://valdi.sonel.dev/store",
-                },
-              },
-            })
-            .catch((error) => {
-              reportError("Error sending message:", error);
-            });
+          sendMessage("VALDI: RIP Your Wallet", message, user.tokens);
         }
 
         if (user.notify) {
@@ -546,35 +539,47 @@ async function checkAndNotifyStore() {
             .join(", ")
             .replace(/,(?!.*,)/gim, " and");
 
-          getMessaging()
-            .sendMulticast({
-              notification: {
-                title: "VALDI: Daily Store",
-                body: `The following skins are now available in your store: ${newSkinsString}!`,
-              },
-              tokens: user.tokens,
-              android: {
-                notification: {
-                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
-                },
-              },
-
-              webpush: {
-                notification: {
-                  icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
-                },
-                fcmOptions: {
-                  link: "https://valdi.sonel.dev/store",
-                },
-              },
-            })
-            .catch((error) => {
-              reportError("Error sending message:", error);
-            });
+          sendMessage(
+            "VALDI: Daily Store",
+            `The following skins are now available in your store: ${newSkinsString}!`,
+            user.tokens
+          );
         }
       })
     );
   });
+}
+
+async function sendMessage(
+  title: string,
+  message: string,
+  tokens: string[],
+  link?: string
+) {
+  await getMessaging()
+    .sendMulticast({
+      notification: {
+        title: title,
+        body: message,
+      },
+      tokens: tokens,
+      android: {
+        notification: {
+          icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+        },
+      },
+      webpush: {
+        notification: {
+          icon: "https://valdi.sonel.dev/assets/icon/favicon.png",
+        },
+        fcmOptions: {
+          link: link,
+        },
+      },
+    })
+    .catch((error) => {
+      reportError("Error sending message:", error);
+    });
 }
 
 async function skinIdsToSkins(skins: string[], offers: any[], apiSkins: any) {
@@ -612,6 +617,28 @@ async function storeToSkins(
         name: skinData?.displayName,
         image: skinData?.displayIcon,
         price: rawSkin.Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+      };
+    })
+  );
+}
+
+async function nightStoreToSkins(
+  store: MightmarketOffer[],
+  apiSkins: Weapons.WeaponSkinLevels[]
+) {
+  return await Promise.all(
+    store.map(async (rawSkin: MightmarketOffer) => {
+      const skinData = apiSkins.find(
+        (skin: any) => skin.uuid === rawSkin.Offer.OfferID
+      );
+      return <NightSkin>{
+        uuid: rawSkin.Offer.OfferID,
+        name: skinData?.displayName,
+        image: skinData?.displayIcon,
+        price: rawSkin.DiscountCosts["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+        originalPrice:
+          rawSkin.Offer.Cost["85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741"],
+        discount: rawSkin.DiscountPercent,
       };
     })
   );
