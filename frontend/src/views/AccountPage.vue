@@ -2,10 +2,16 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-card class="card">
-        <!-- <ion-card-header>
-          <ion-card-title>Sign In</ion-card-title>
-        </ion-card-header> -->
+        <ion-card-header>
+          <ion-card-title>Account</ion-card-title>
+        </ion-card-header>
         <ion-card-content>
+          <p>
+            <b>{{ accountStore.user.username }}</b>
+          </p>
+          <p>
+            <b>Level {{ accountStore.user.level }}</b>
+          </p>
           <ion-button type="submit" @click="logout()">
             Sign Out
             <ion-icon slot="end" :icon="logIn"></ion-icon>

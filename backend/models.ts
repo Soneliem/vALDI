@@ -1,6 +1,7 @@
 export interface Store {
   bundles: Bundle[];
   skins: Skin[];
+  nightMarket?: NightSkin[];
   remainingTime: number;
 }
 
@@ -18,6 +19,15 @@ export interface Skin {
   price: number;
 }
 
+export interface NightSkin {
+  uuid: string;
+  name: string;
+  image: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+}
+
 export interface dbUser {
   id: string;
   client: any;
@@ -31,6 +41,18 @@ export interface StoreOffer {
   StartDate: string;
   Cost: Cost;
   Rewards: Reward[];
+}
+
+export interface MightmarketOffer {
+  BonusOfferID: string;
+  Offer: StoreOffer;
+  DiscountPercent: number;
+  DiscountCosts: DiscountCosts;
+  IsSeen: boolean;
+}
+
+export interface DiscountCosts {
+  "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741": number;
 }
 
 export interface Cost {

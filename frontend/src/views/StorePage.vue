@@ -7,6 +7,10 @@
             <ion-label>Daily</ion-label>
             <ion-icon :icon="timeOutline" />
           </ion-segment-button>
+          <ion-segment-button value="nightMarket" v-if="store.nightMarket">
+            <ion-label>Night Market</ion-label>
+            <ion-icon :icon="moonOutline" />
+          </ion-segment-button>
           <ion-segment-button value="bundles">
             <ion-label>Bundles</ion-label>
             <ion-icon :icon="albumsOutline" />
@@ -26,6 +30,7 @@
             ></ion-toggle>
           </ion-toolbar>
         </ion-row>
+        <ion-progress-bar :value="progress"></ion-progress-bar>
         <ion-row class="ion-justify-content-center" v-if="isLoading">
           <ion-col size="auto" v-for="i in 4" v-bind:key="i">
             <StoreItem :loading="true"></StoreItem>
@@ -42,6 +47,30 @@
               :image="item.image"
               :name="item.name"
               :price="item.price"
+            ></StoreItem>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid v-if="segment == 'nightMarket'">
+        <ion-row class="ion-justify-content-center" v-if="isLoading">
+          <ion-col size="auto" v-for="i in 6" v-bind:key="i">
+            <StoreItem :loading="true"></StoreItem>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center" v-if="!isLoading">
+          <ion-col
+            size="auto"
+            v-for="item in store.nightMarket"
+            v-bind:key="item.uuid"
+          >
+            <StoreItem
+              :loading="false"
+              :image="item.image"
+              :name="item.name"
+              :price="item.price"
+              :originalPrice="item.originalPrice"
+              :discount="item.discount"
             ></StoreItem>
           </ion-col>
         </ion-row>
@@ -69,7 +98,6 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-    <ion-progress-bar :value="progress"></ion-progress-bar>
   </ion-page>
 </template>
 
@@ -91,7 +119,7 @@ import {
   IonText,
   isPlatform,
 } from "@ionic/vue";
-import { timeOutline, albumsOutline } from "ionicons/icons";
+import { timeOutline, albumsOutline, moonOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
 import BundleItem from "@/components/BundleItem.vue";
 import { useAccountStore } from "@/store/account";

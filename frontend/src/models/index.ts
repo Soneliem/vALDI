@@ -7,6 +7,7 @@ export enum accountStatus {
 export interface Store {
   bundles: Bundle[];
   skins: StoreSkin[];
+  nightMarket?: NightSkin[];
   remainingTime: number;
 }
 
@@ -22,6 +23,15 @@ export interface StoreSkin {
   name: string;
   image: string;
   price: number;
+}
+
+export interface NightSkin {
+  uuid: string;
+  name: string;
+  image: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
 }
 
 export interface SkinsResponse {

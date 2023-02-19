@@ -37,7 +37,21 @@
           class="ion-text-center"
           style="vertical-align: bottom"
           >{{ price }}</b
-        ><b v-if="!show" class="ion-text-center" style="vertical-align: bottom"
+        >
+        <del
+          v-if="show && discount"
+          class="ion-text-center discount"
+          style="vertical-align: bottom"
+          >{{ originalPrice }}</del
+        >
+        <b
+          v-if="show && discount"
+          class="ion-text-center"
+          style="vertical-align: bottom"
+          >(-{{ discount }}%)
+        </b>
+
+        <b v-if="!show" class="ion-text-center" style="vertical-align: bottom"
           >???</b
         ></ion-card-subtitle
       >
@@ -67,6 +81,8 @@ const props = defineProps<{
   loading?: boolean;
   show?: boolean;
   removeButton?: boolean;
+  discount?: number;
+  originalPrice?: number;
 }>();
 
 defineEmits(["remove"]);
@@ -116,10 +132,16 @@ if (props.show) {
   vertical-align: middle;
 }
 
+.discount {
+  color: rgb(255, 69, 69);
+  padding: 0px 2px 0px 5px;
+}
+
 .show {
   animation: bounce-in 1s;
   visibility: visible;
 }
+
 .bounce-leave-active {
   animation: bounce-in 0.5s reverse;
 }

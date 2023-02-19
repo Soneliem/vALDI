@@ -49,11 +49,11 @@ Name derived from my favourite grocery store that overworks and under staffs its
 #### Other features
 
 - [x] MFA Support
+- [x] Night Market
 - [x] Published to Play Store
 
 #### Planned Features
 
-- [ ] Night Market
 - [ ] Multi Account Support
 
 *Fun is subjective
