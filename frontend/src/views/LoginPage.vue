@@ -83,8 +83,8 @@
                 <ion-card-subtitle
                   >A simple cross-platform web and mobile app to view your
                   Valorant store. Created by Soneliem. <br /><br />
-                  Name derived after my favourite grocery store that overworks
-                  and understaffs its workers
+                  Name derived from my favourite grocery store that overworks
+                  and under staffs its workers
                   <br /><br />
                   <a href="https://valdi.sonel.dev/privacy"
                     >Privacy Policy</a
@@ -103,12 +103,7 @@
                     href="https://discord.gg/X7CYCeZSRK"
                     target="_blank"
                     title="Open Discord Server"
-                    ><img class="sm-logo" src="/assets/discord.png" /></a
-                  ><a
-                    href="https://waiua.sonel.dev"
-                    target="_blank"
-                    title="Check out WAIUA"
-                    ><img class="sm-logo" src="/assets/waiua.png"
+                    ><img class="sm-logo" src="/assets/discord.png"
                   /></a>
                 </div>
               </ion-card-content> </ion-card
@@ -266,6 +261,7 @@ async function submitMFA() {
 
 .spread {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  padding-bottom: 10px;
 }
 </style>
