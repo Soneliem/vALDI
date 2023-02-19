@@ -416,8 +416,6 @@ app.post("/store", async function (req, res) {
           .SingleItemOffersRemainingDurationInSeconds,
     };
 
-    // TODO: Implement nightmarket
-
     if (rawStore?.data?.BonusStore) {
       const bonusSkins = await nightStoreToSkins(
         rawStore?.data?.BonusStore?.BonusStoreOffers,

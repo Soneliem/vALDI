@@ -9,7 +9,7 @@
           </ion-segment-button>
           <ion-segment-button value="nightMarket" v-if="store.nightMarket">
             <ion-label>Night Market</ion-label>
-            <ion-icon :icon="timeOutline" />
+            <ion-icon :icon="moonOutline" />
           </ion-segment-button>
           <ion-segment-button value="bundles">
             <ion-label>Bundles</ion-label>
@@ -30,6 +30,7 @@
             ></ion-toggle>
           </ion-toolbar>
         </ion-row>
+        <ion-progress-bar :value="progress"></ion-progress-bar>
         <ion-row class="ion-justify-content-center" v-if="isLoading">
           <ion-col size="auto" v-for="i in 4" v-bind:key="i">
             <StoreItem :loading="true"></StoreItem>
@@ -97,7 +98,6 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-    <ion-progress-bar :value="progress"></ion-progress-bar>
   </ion-page>
 </template>
 
@@ -119,7 +119,7 @@ import {
   IonText,
   isPlatform,
 } from "@ionic/vue";
-import { timeOutline, albumsOutline } from "ionicons/icons";
+import { timeOutline, albumsOutline, moonOutline } from "ionicons/icons";
 import StoreItem from "@/components/StoreItem.vue";
 import BundleItem from "@/components/BundleItem.vue";
 import { useAccountStore } from "@/store/account";
