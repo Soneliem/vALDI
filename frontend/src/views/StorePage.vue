@@ -24,6 +24,7 @@
           <ion-toolbar class="notify">
             <ion-text slot="start">Receive daily store notification</ion-text>
             <ion-toggle
+              aria-label="Receive daily store notification"
               slot="end"
               :checked="accountStore.notificationEnabled"
               @ionChange="toggleNotification"

@@ -16,9 +16,11 @@
               </ion-card-header>
               <ion-card-content>
                 <ion-item-group>
-                  <ion-item fill="solid" class="ion-margin">
+                  <ion-item class="ion-margin">
                     <ion-label position="floating">Username</ion-label>
                     <ion-input
+                      fill="solid"
+                      aria-label="Username"
                       appAutofill
                       autocomplete="username"
                       v-model="form.username"
@@ -28,11 +30,13 @@
                     ></ion-input>
                   </ion-item>
 
-                  <ion-item fill="solid" class="ion-margin">
+                  <ion-item class="ion-margin">
                     <ion-label position="floating">Password</ion-label>
                     <ion-input
+                      fill="solid"
                       appAutofill
                       autocomplete="current-password"
+                      aria-label="Password"
                       type="password"
                       v-model="form.password"
                       id="password"
@@ -40,8 +44,10 @@
                     ></ion-input>
                   </ion-item>
 
-                  <ion-item fill="solid" class="ion-margin">
+                  <ion-item class="ion-margin">
                     <ion-select
+                      aria-label="Region"
+                      fill="solid"
                       appAutofill
                       interface="popover"
                       placeholder="Select Region"
@@ -128,6 +134,7 @@
           <ion-item>
             <ion-label position="stacked">Code</ion-label>
             <ion-input
+              aria-label="Code"
               type="number"
               placeholder="000000"
               v-model="code"

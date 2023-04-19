@@ -31,6 +31,8 @@ import {
   IonButton,
   IonIcon,
   useIonRouter,
+  IonCardHeader,
+  IonCardTitle,
   loadingController,
 } from "@ionic/vue";
 import { logIn } from "ionicons/icons";

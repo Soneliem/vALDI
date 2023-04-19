@@ -2346,14 +2346,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ionic/core@npm:6.5.3":
-  version: 6.5.3
-  resolution: "@ionic/core@npm:6.5.3"
+"@ionic/core@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@ionic/core@npm:7.0.2"
   dependencies:
-    "@stencil/core": ^2.18.0
-    ionicons: ^6.1.1
+    "@stencil/core": ^3.2.1
+    ionicons: ^7.1.0
     tslib: ^2.1.0
-  checksum: a949e94914fc22af1e7f6059a89386c32dcc9740d40f783ff0b63268f98bc279c6400c1e2f0298d838b65a3fb6eda8b127e74b4606443157825200e03174c489
+  checksum: c341ea8818d3dd08540660085336a8b13f1c2dceca3c99d2c872e04d82f10eaed0ff1a417e136831a763013e1846685bba9c212d53924ddc38c9de80aec2d4d0
   languageName: node
   linkType: hard
 
@@ -2465,22 +2465,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ionic/vue-router@npm:^6.5.0":
-  version: 6.5.3
-  resolution: "@ionic/vue-router@npm:6.5.3"
+"@ionic/vue-router@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@ionic/vue-router@npm:7.0.2"
   dependencies:
-    "@ionic/vue": 6.5.3
-  checksum: de52950cece131838a8ce5cba42ebc82330829663e06ef77330d46f5a366149dba1aa0aeef55ae52c907489c889771c5432fb9dca65c9e1dc6370952711f2b07
+    "@ionic/vue": 7.0.2
+  checksum: 140260f65fd229aa3e2b97031f1e0e8a1df9df3c9263f34ba57ddc5f9f9b3a995bd93e48ad7e10e8b519afd756f693c133c4fde46c27ef5246e449d252cba0b6
   languageName: node
   linkType: hard
 
-"@ionic/vue@npm:6.5.3, @ionic/vue@npm:^6.5.0":
-  version: 6.5.3
-  resolution: "@ionic/vue@npm:6.5.3"
+"@ionic/vue@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@ionic/vue@npm:7.0.2"
   dependencies:
-    "@ionic/core": 6.5.3
-    ionicons: ^6.1.1
-  checksum: 5bb8710d1c6b5ae8175a95b131eebb164773677780adc79c442cfd81084d57ca143bd5de64d443babe26ec325799769128e0ceb6d62c42bdaa1363498efe1020
+    "@ionic/core": 7.0.2
+    ionicons: ^7.0.0
+  checksum: c43b133e990eb30db5eef999a491b33f1d7ad518dd39547001284bfa646e9fc1b563aed204bec3fc248fda12d05a29b3ffecc8dbcda58aa3ceb0d32c9022f54d
   languageName: node
   linkType: hard
 
@@ -2842,6 +2842,15 @@ __metadata:
   bin:
     stencil: bin/stencil
   checksum: 139a7b63b81c7eaa5026e76e1c947a402f58d0a6d1d353a34883995ea7e480fa6991e71c0c3d812f7046d395b99d0f7f7b11af9277f04a3c62aba96cda18dd5d
+  languageName: node
+  linkType: hard
+
+"@stencil/core@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "@stencil/core@npm:3.2.1"
+  bin:
+    stencil: bin/stencil
+  checksum: b7349e0e7551d287264a6052ea0c3246ae6e55c173bffaf7b8db73e16f128ba1bb4e704b7b6d76810a22fc38b9e14daf67d273133f9c435ad327f1a4bd4434b5
   languageName: node
   linkType: hard
 
@@ -6214,9 +6223,10 @@ express-rate-limit@Soneliem/express-rate-limit:
     "@capacitor/splash-screen": ^4.1.3
     "@capacitor/status-bar": ^4.0.1
     "@ionic/cli": ^6.20.3
+    "@ionic/core": 7.0.2
     "@ionic/storage": ^3.0.6
-    "@ionic/vue": ^6.5.0
-    "@ionic/vue-router": ^6.5.0
+    "@ionic/vue": 7.0.2
+    "@ionic/vue-router": 7.0.2
     "@types/node": ^18.11.18
     "@typescript-eslint/eslint-plugin": ^5.47.1
     "@typescript-eslint/parser": ^5.47.1
@@ -6241,7 +6251,7 @@ express-rate-limit@Soneliem/express-rate-limit:
     vite: ^4.0.3
     vite-plugin-pwa: ^0.14.0
     vitest: ^0.26.2
-    vue: ^3.2.45
+    vue: ^3.2.47
     vue-router: ^4.1.6
     vue-tsc: ^1.0.18
   languageName: unknown
@@ -7056,12 +7066,21 @@ express-rate-limit@Soneliem/express-rate-limit:
   languageName: node
   linkType: hard
 
-"ionicons@npm:^6.0.4, ionicons@npm:^6.1.1":
+"ionicons@npm:^6.0.4":
   version: 6.1.2
   resolution: "ionicons@npm:6.1.2"
   dependencies:
     "@stencil/core": ^2.18.0
   checksum: 31686853c141af9860e43c6241ae5207a09c12222efb1541a027423d324441b0e6583153a93b2691c7a4fd4a77bc6c994ffb28f3f4acab48053a7917e1473125
+  languageName: node
+  linkType: hard
+
+"ionicons@npm:^7.0.0, ionicons@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "ionicons@npm:7.1.0"
+  dependencies:
+    "@stencil/core": ^2.18.0
+  checksum: 66e05b7d7c9625085cad9640ff2e1bb2e7737fa25855911bd2e516b50f1cf441761cec6e894dfbc2a9770e577f1d83d851d1453cb210d6bb0064ad15fa484e9c
   languageName: node
   linkType: hard
 
@@ -11525,7 +11544,7 @@ express-rate-limit@Soneliem/express-rate-limit:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.2.45":
+"vue@npm:^3.2.47":
   version: 3.2.47
   resolution: "vue@npm:3.2.47"
   dependencies:
