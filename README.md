@@ -1,3 +1,8 @@
+> :warning: **Start Announcement**
+>
+# There have been a few DMCA Notices from Riot Games submitted to similar apps like vALDI recently. Therefore I will not be publishing vALDI for the time being.
+>
+> :warning: **End Announcement**
 <p align="center">
   <a href="https://github.com/Soneliem/vALDI">
     <img src="assets/logo.png" alt="Logo" width="90" height="90">
